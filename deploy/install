@@ -1,0 +1,34 @@
+#!/bin/sh
+
+TIMESTAMP=`date "+%b-%d-%Y-%T"`
+
+# Update /etc/postfix/transport
+#------------------------------
+
+/usr/sbin/postmap /etc/postfix/transport
+
+# Set default configuration
+#--------------------------
+
+logger -p local6.notice -t installer "app-smtp-core - setting default configuration"
+
+if [ -e /etc/postfix/main.cf ]; then
+    cp /etc/postfix/main.cf /var/clearos/smtp/backup/main.cf.$TIMESTAMP
+fi
+
+cp /usr/clearos/apps/smtp/deploy/main.cf /etc/postfix/main.cf
+
+if [ -e /etc/postfix/master.cf ]; then
+    cp /etc/postfix/master.cf /var/clearos/smtp/backup/master.cf.$TIMESTAMP
+fi
+
+cp /usr/clearos/apps/smtp/deploy/master.cf /etc/postfix/master.cf
+
+# Set default start/boot
+#-----------------------
+
+logger -p local6.notice -t installer "app-smtp-core - enabling SMTP server"
+chkconfig postfix on
+
+logger -p local6.notice -t installer "app-smtp-core - starting SMTP server"
+service postfix start

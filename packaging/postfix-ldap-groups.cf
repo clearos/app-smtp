@@ -1,0 +1,16 @@
+# CLEAROS_DIRECTORY_TARGET=/etc/postfix/ldap-groups.cf
+# CLEAROS_DIRECTORY_OWNER=root
+# CLEAROS_DIRECTORY_GROUP=root
+# CLEAROS_DIRECTORY_PERMISSIONS=0644
+# CLEAROS_DIRECTORY_WARNING_MESSAGE
+server_host = ldap://127.0.0.1:389
+search_base = ou=Groups,ou=Accounts,@@@base_dn@@@
+query_filter = (&(objectClass=groupOfNames)(cn=%s))
+result_attribute =
+leaf_result_attribute = mail
+special_result_attribute = member
+result_filter = %s
+search_timeout = 15
+scope = sub
+bind = no
+version = 3

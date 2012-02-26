@@ -5,7 +5,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 $app['basename'] = 'smtp';
-$app['version'] = '5.9.9.0';
+$app['version'] = '1.0.5';
 $app['release'] = '1';
 $app['vendor'] = 'ClearFoundation';
 $app['packager'] = 'ClearFoundation';
@@ -34,9 +34,33 @@ $app['controllers']['trusted']['title'] = lang('smtp_trusted_networks');
 /////////////////////////////////////////////////////////////////////////////
 
 $app['core_requires'] = array(
-    'postfix >= 2.6.6'
+    'app-certificate-manager-core',
+    'app-network',
+);
+
+$app['core_requires'] = array(
+    'app-network-core',
+    'cyrus-sasl-plain',
+    'mailx >= 12.4',
+    'php-pear-Net-LMTP',
+    'php-pear-Net-SMTP',
+    'postfix >= 2.6.6',
 );
 
 $app['core_file_manifest'] = array(
     'postfix.php'=> array('target' => '/var/clearos/base/daemon/postfix.php'),
+    'postfix-ldap-aliases.cf'=> array('target' => '/var/clearos/ldap/synchronize/postfix-ldap-aliases.cf'),
+    'postfix-ldap-groups.cf'=> array('target' => '/var/clearos/ldap/synchronize/postfix-ldap-groups.cf'),
+    'mailprefilter' => array(
+        'target' => '/usr/sbin/mailprefilter',
+        'mode' => '0755',
+        'owner' => 'root',
+        'group' => 'root',
+    ),
 );
+
+$app['core_directory_manifest'] = array(
+   '/var/clearos/smtp' => array(),
+   '/var/clearos/smtp/backup' => array(),
+);
+

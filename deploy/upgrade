@@ -1,0 +1,29 @@
+#!/bin/sh
+
+# Update configlets with LDAP information
+#----------------------------------------
+
+/usr/sbin/ldap-synchronize
+
+# Grab bootstrap certificates from Certificate Manager
+#-----------------------------------------------------
+
+KEY_SOURCE=/etc/pki/CA/bootstrap.key
+KEY=/etc/postfix/key.pem
+
+if [ ! -s "$KEY" ]; then
+    logger -p local6.notice -t installer "app-mail-filter-core - prepping server key"
+    cp $KEY_SOURCE $KEY
+    chown root.root $KEY
+    chmod 600 $KEY
+fi
+
+CRT_SOURCE=/etc/pki/CA/bootstrap.crt
+CRT=/etc/postfix/cert.pem
+
+if [ ! -s "$CRT" ]; then
+    logger -p local6.notice -t installer "app-mail-filter-core - prepping server certificate"
+    cp $CRT_SOURCE $CRT
+    chown root.root $CRT
+    chmod 600 $CRT
+fi

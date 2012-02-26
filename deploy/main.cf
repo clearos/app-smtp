@@ -1,13 +1,5 @@
-# Global Postfix configuration file. This file lists only a subset
-# of all 300+ parameters. See the postconf(5) manual page for a
-# complete list.
-#
-# The general format of each line is: parameter = value. Lines
-# that begin with whitespace continue the previous line. A value can
-# contain references to other $names or ${name}s.
-#
-# NOTE - CHANGE NO MORE THAN 2-3 PARAMETERS AT A TIME, AND TEST IF
-# POSTFIX STILL WORKS AFTER EVERY CHANGE.
+# For best results, change no more than 2-3 parameters at a time,
+# and test if Postfix still works after every change.
 
 # SOFT BOUNCE
 #
@@ -39,6 +31,12 @@ command_directory = /usr/sbin
 # directory must be owned by root.
 #
 daemon_directory = /usr/libexec/postfix
+
+# The data_directory parameter specifies the location of Postfix-writable
+# data files (caches, random numbers). This directory must be owned
+# by the mail_owner account (see below).
+#
+data_directory = /var/lib/postfix
 
 # QUEUE AND PROCESS OWNERSHIP
 #
@@ -109,7 +107,7 @@ myorigin = $mydomain
 #inet_interfaces = all
 #inet_interfaces = $myhostname
 #inet_interfaces = $myhostname, localhost
-inet_interfaces = localhost
+inet_interfaces = all
 
 # Enable IPv4, and IPv6 if supported
 inet_protocols = all
@@ -157,8 +155,8 @@ inet_protocols = all
 #
 # See also below, section "REJECTING MAIL FOR UNKNOWN LOCAL USERS".
 #
+#mydestination = $myhostname, localhost.$mydomain, localhost
 mydestination = $myhostname, localhost.$mydomain, localhost, $mydomain
-#mydestination = $myhostname, localhost.$mydomain, localhost, $mydomain
 #mydestination = $myhostname, localhost.$mydomain, localhost, $mydomain,
 #	mail.$mydomain, www.$mydomain, ftp.$mydomain
 
@@ -260,7 +258,7 @@ unknown_local_recipient_reject_code = 550
 #mynetworks = 168.100.189.0/28, 127.0.0.0/8
 #mynetworks = $config_directory/mynetworks
 #mynetworks = hash:/etc/postfix/network_table
-mynetworks = 127.0.0.0/8
+mynetworks = 127.0.0.0/8, 192.168.0.0/16, 10.0.0.0/8, 172.16.0.0/12
 
 # The relay_domains parameter restricts what destinations this system will
 # relay mail to.  See the smtpd_recipient_restrictions description in
@@ -349,7 +347,7 @@ mynetworks = 127.0.0.0/8
 # The ADDRESS_REWRITING_README document gives information about
 # address masquerading or other forms of address rewriting including
 # username->Firstname.Lastname mapping.
-virtual_alias_maps = $virtual_maps, ldap:/etc/postfix/ldap-aliases.cf, ldap:/etc/postfix/ldap-groups.cf
+virtual_alias_maps = $alias_maps, $virtual_maps, ldap:/etc/postfix/ldap-aliases.cf, ldap:/etc/postfix/ldap-groups.cf
 
 # ADDRESS REDIRECTION (VIRTUAL DOMAIN)
 #
@@ -540,7 +538,7 @@ alias_database = hash:/etc/aliases
 #
 # For details, see "man header_checks".
 #
-#header_checks = regexp:/etc/postfix/header_checks
+header_checks = regexp:/etc/postfix/header_checks
 
 # FAST ETRN SERVICE
 #
@@ -671,7 +669,6 @@ message_size_limit = 10240000
 luser_relay =
 recipient_delimiter = +
 message_strip_characters = \0
-disable_vrfy_command = yes
 
 # Authentication with SASL
 broken_sasl_auth_clients = yes
@@ -686,10 +683,8 @@ smtpd_tls_cert_file = /etc/postfix/cert.pem
 smtpd_tls_key_file = /etc/postfix/key.pem
 smtpd_tls_loglevel = 1
 
-# Mail restrictions (note: Kolab policies are not implemented)
+# Mail restrictions
 smtpd_recipient_restrictions = permit_sasl_authenticated, permit_mynetworks, reject_unauth_destination
-kolabpolicy_time_limit = 3600
-kolabpolicy_max_idle = 20
 
 # Mail routing
 mailbox_transport = mailpostfilter
