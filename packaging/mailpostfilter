@@ -41,9 +41,9 @@ require_once $bootstrap . '/bootstrap.php';
 // D E P E N D E N C I E S
 ///////////////////////////////////////////////////////////////////////////////
 
-use \clearos\apps\smtp\Incoming as Incoming;
+use \clearos\apps\smtp\Filter_Incoming as Filter_Incoming;
 
-clearos_load_library('smtp/Incoming');
+clearos_load_library('smtp/Filter_Incoming');
 
 ///////////////////////////////////////////////////////////////////////////////
 // M A I N

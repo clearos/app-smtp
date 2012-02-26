@@ -22,6 +22,7 @@ Requires: app-base-core
 Requires: app-network-core
 Requires: cyrus-sasl-plain
 Requires: mailx >= 12.4
+Requires: php-pear-Net-LMTP
 Requires: php-pear-Net-SMTP
 Requires: postfix >= 2.6.6
 
@@ -40,9 +41,8 @@ cp -r * %{buildroot}/usr/clearos/apps/smtp/
 
 install -d -m 0755 %{buildroot}/var/clearos/smtp
 install -d -m 0755 %{buildroot}/var/clearos/smtp/backup
+install -D -m 0755 packaging/mailpostfilter %{buildroot}/usr/sbin/mailpostfilter
 install -D -m 0755 packaging/mailprefilter %{buildroot}/usr/sbin/mailprefilter
-install -D -m 0644 packaging/postfix-ldap-aliases.cf %{buildroot}/var/clearos/ldap/synchronize/postfix-ldap-aliases.cf
-install -D -m 0644 packaging/postfix-ldap-groups.cf %{buildroot}/var/clearos/ldap/synchronize/postfix-ldap-groups.cf
 install -D -m 0644 packaging/postfix.php %{buildroot}/var/clearos/base/daemon/postfix.php
 
 %post
@@ -88,7 +88,6 @@ exit 0
 /usr/clearos/apps/smtp/deploy
 /usr/clearos/apps/smtp/language
 /usr/clearos/apps/smtp/libraries
+/usr/sbin/mailpostfilter
 /usr/sbin/mailprefilter
-/var/clearos/ldap/synchronize/postfix-ldap-aliases.cf
-/var/clearos/ldap/synchronize/postfix-ldap-groups.cf
 /var/clearos/base/daemon/postfix.php

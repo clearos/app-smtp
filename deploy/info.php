@@ -49,10 +49,14 @@ $app['core_requires'] = array(
 
 $app['core_file_manifest'] = array(
     'postfix.php'=> array('target' => '/var/clearos/base/daemon/postfix.php'),
-    'postfix-ldap-aliases.cf'=> array('target' => '/var/clearos/ldap/synchronize/postfix-ldap-aliases.cf'),
-    'postfix-ldap-groups.cf'=> array('target' => '/var/clearos/ldap/synchronize/postfix-ldap-groups.cf'),
     'mailprefilter' => array(
         'target' => '/usr/sbin/mailprefilter',
+        'mode' => '0755',
+        'owner' => 'root',
+        'group' => 'root',
+    ),
+    'mailpostfilter' => array(
+        'target' => '/usr/sbin/mailpostfilter',
         'mode' => '0755',
         'owner' => 'root',
         'group' => 'root',

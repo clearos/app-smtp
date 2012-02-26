@@ -354,14 +354,11 @@ class Filter
             $line = $frame['line'];
         }
 
-        /* In debugging mode the errors get delivered to the screen
-         * without a time stamp (mainly because of unit testint) 
-         */
         if (!$this->_debug) {
             clearos_log("mailfilter", "$msg, $file, $line");
         } else {
             $msg .= ' (Line ' . $frame['line'] . ' in ' . basename($frame['file']) . ")\n";
-            fwrite(STDOUT, $msg);
+            clearos_log("mailfilter", $msg);
         }
     }
     

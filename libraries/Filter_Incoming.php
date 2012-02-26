@@ -151,7 +151,9 @@ class Filter_Incoming extends \Filter
         /* Route mail to where it needs to go.  */
 
         $host = "localhost";
+        $port = 2003;
 
+        /*
         $pcnverify = verify_recipient($this->_recipients[0]);
 
         if ($pcnverify == PCN_USER_EXISTS) {
@@ -176,6 +178,7 @@ class Filter_Incoming extends \Filter
             clearos_log("mailfilter", "Directing unverified message to mail delivery");
             $port = 2003;
         }
+        */
 
         // Point Clark Networks -- end
 
@@ -199,6 +202,8 @@ class Filter_Incoming extends \Filter
             $buffer = fgets($tmpf, 8192);
             if (!$headers_done && rtrim($buffer, "\r\n") == '') {
                 $headers_done = true;
+                if (! is_array($this->_add_headers))
+                    $this->_add_headers = array($this->_add_headers);
                 foreach ($this->_add_headers as $h) {
                     $result = $transport->data("$h\r\n");
                     if ($result instanceof PEAR_Error) {
@@ -220,9 +225,11 @@ class Filter_Incoming extends \Filter
              * between \r and \n, so we try to avoid that. The limit
              * of 100 reads is to battle abuse
              */
-            while ($buffer{$len-1} == "\r" && $len < 8192 + 100) {
-                $buffer .= fread($tmpf, 1);
-                $len++;
+            if ($len > 0) {
+                while ($buffer{$len-1} == "\r" && $len < 8192 + 100) {
+                    $buffer .= fread($tmpf, 1);
+                    $len++;
+                }
             }
             $result = $transport->data($buffer);
             if ($result instanceof PEAR_Error) {
