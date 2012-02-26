@@ -64,9 +64,6 @@ smtp-amavis  unix -     -       n       -       5       smtp
 # SMTP interface for injecting mail into Amavis
 127.0.0.1:10025 inet n	-	n	-	-  smtpd
     -o content_filter=smtp-amavis:[127.0.0.1]:10024
-    -o cleanup_service_name=cleanup
-    -o local_recipient_maps=
-    -o relay_recipient_maps=
     -o smtpd_restriction_classes=
     -o smtpd_client_restrictions=
     -o smtpd_helo_restrictions=
@@ -83,9 +80,6 @@ smtp-amavis  unix -     -       n       -       5       smtp
 #=====================================================================
 127.0.0.1:10026 inet n	-	n	-	-  smtpd
     -o content_filter=
-    -o cleanup_service_name=cleanup
-    -o local_recipient_maps=
-    -o relay_recipient_maps=
     -o smtpd_restriction_classes=
     -o smtpd_delay_reject=no
     -o smtpd_client_restrictions=permit_mynetworks,reject
