@@ -65,8 +65,7 @@ function verify_recipient($recipient)
     $ldap = ldap_connect($conf['filter']['ldap_uri']);
 
     if (!ldap_bind($ldap, $conf['filter']['bind_dn'], $conf['filter']['bind_pw'])) {
-        Horde::logMessage(sprintf(_("Unable to contact LDAP server: %s"),
-                  ldap_error($ldap)), __FILE__, __LINE__, PEAR_LOG_INFO);
+        clearos_log("mailfilter", sprintf(_("Unable to contact LDAP server: %s"), ldap_error($ldap)));
         return PCN_FAIL;
     }
 
@@ -78,8 +77,7 @@ function verify_recipient($recipient)
     $result = ldap_search($ldap, $conf['filter']['base_dn'], $filter, array("dn", "mail"));
 
     if (!$result) {
-        Horde::logMessage(sprintf(_("Unable to perform LDAP search: %s"),
-                  ldap_error($ldap)), __FILE__, __LINE__, PEAR_LOG_INFO);
+        clearos_log("mailfilter", sprintf(_("Unable to perform LDAP search: %s"), ldap_error($ldap)));
         return PCN_FAIL;
     }
 
@@ -97,9 +95,9 @@ class Filter_Incoming extends \Filter
 {
     var $_add_headers;
 
-    function Filter_Incoming($transport = 'LMTP', $debug = false)
+    function __construct($transport = 'LMTP', $debug = false)
     {
-        Filter::Filter($transport, $debug);
+        \Filter::Filter($transport, $debug);
     }
 
     function _parse($inh = STDIN)
@@ -143,7 +141,7 @@ class Filter_Incoming extends \Filter
             }
         }
         
-        clearos_log(_("mailpostfilter successfully completed."));
+        clearos_log("mailfilter", "filter successfully completed.");
     }
 
     function deliver()
@@ -158,29 +156,24 @@ class Filter_Incoming extends \Filter
 
         if ($pcnverify == PCN_USER_EXISTS) {
             if (isset($conf['spam_quarantine_mailbox']) && !empty($conf['spam_quarantine_mailbox'])) {
-                Horde::logMessage(_("Directing message to spam quarantine."), __FILE__, __LINE__, PEAR_LOG_DEBUG);
+                clearos_log("mailfilter", "Directing message to spam quarantine.");
                 $this->_recipients[0] = $conf['spam_quarantine_mailbox'];
                 $port = 2003;
-            } else if (file_exists("/var/lib/dspam/dspam.sock")) {
-                Horde::logMessage(_("Directing message to Dspam."), __FILE__, __LINE__, PEAR_LOG_DEBUG);
-                $this->_transport = 'SMTP';
-                $port = 10027;
             } else {
-                Horde::logMessage(_("Directing message to mail delivery."), __FILE__, __LINE__, PEAR_LOG_DEBUG);
+                clearos_log("mailfilter", "Directing message to mail delivery.");
                 $port = 2003;
             }
         } else if ($pcnverify == PCN_NO_SUCH_USER) {
             if (isset($conf['catch_all_mailbox']) && !empty($conf['catch_all_mailbox'])) {
-                Horde::logMessage(_("Redirecting message to catch-all mailbox"), __FILE__, __LINE__, PEAR_LOG_DEBUG);
+                clearos_log("mailfilter", "Redirecting message to catch-all mailbox");
                 $port = 2003;
                 $this->_recipients[0] = $conf['catch_all_mailbox'];
             } else {
-                Horde::logMessage(sprintf(_("Bouncing message to %s"),
-                    $this->_recipients[0]), __FILE__, __LINE__, PEAR_LOG_DEBUG);
+                clearos_log("mailfilter", sprintf(_("Bouncing message to %s"), $this->_recipients[0]));
                 return PEAR::raiseError(sprintf(_("Fatal: 550- Mailbox does not exist")), OUT_LOG | EX_NOUSER);
             }
         } else {
-            Horde::logMessage(_("Directing unverified message to mail delivery"), __FILE__, __LINE__, PEAR_LOG_DEBUG);
+            clearos_log("mailfilter", "Directing unverified message to mail delivery");
             $port = 2003;
         }
 

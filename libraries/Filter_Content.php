@@ -78,9 +78,9 @@ define('RM_STATE_READING_BODY',   5 );
 
 class Filter_Content extends \Filter
 {
-    function Filter_Content($transport = 'SMTP', $debug = false)
+    function __construct($transport = 'SMTP', $debug = false)
     {
-        Filter::Filter($transport, $debug);
+        \Filter::Filter($transport, $debug);
     }
     
     function _parse($inh = STDIN)
@@ -195,11 +195,11 @@ class Filter_Content extends \Filter
 
         require_once 'Net/SMTP.php';
 
-        $host = 'localhost';
+        $host = '127.0.0.1';
         $port = 10026;
 
         set_error_handler('\clearos\apps\smtp\ignore_error');
-        if ($smtptest = new \Net_SMTP('localhost', '10024')) {
+        if ($smtptest = new \Net_SMTP('127.0.0.1', '10024')) {
             if (!(\PEAR::isError($e = $smtptest->connect()))) {
                  $port = 10025;
                  $smtptest->disconnect();
