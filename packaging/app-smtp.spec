@@ -10,6 +10,7 @@ Source: %{name}-%{version}.tar.gz
 Buildarch: noarch
 Requires: %{name}-core = 1:%{version}-%{release}
 Requires: app-base
+Requires: app-network
 
 %description
 SMTP Server description...
@@ -19,7 +20,9 @@ Summary: SMTP Server - APIs and install
 License: LGPLv3
 Group: ClearOS/Libraries
 Requires: app-base-core
+Requires: app-certificate-manager-core
 Requires: app-network-core
+Requires: app-smtp-plugin-core
 Requires: cyrus-sasl-plain
 Requires: mailx >= 12.4
 Requires: php-pear-Net-LMTP

@@ -33,13 +33,14 @@ $app['controllers']['trusted']['title'] = lang('smtp_trusted_networks');
 // Packaging
 /////////////////////////////////////////////////////////////////////////////
 
-$app['core_requires'] = array(
-    'app-certificate-manager-core',
+$app['requires'] = array(
     'app-network',
 );
 
 $app['core_requires'] = array(
+    'app-certificate-manager-core',
     'app-network-core',
+    'app-smtp-plugin-core',
     'cyrus-sasl-plain',
     'mailx >= 12.4',
     'php-pear-Net-LMTP',
