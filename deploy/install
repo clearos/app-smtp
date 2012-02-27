@@ -24,6 +24,21 @@ fi
 
 cp /usr/clearos/apps/smtp/deploy/master.cf /etc/postfix/master.cf
 
+# Clean out default aliases
+#--------------------------
+
+if [ -f /etc/aliases ]; then
+    SILLYALIASES="adm all bin canna daemon dbus decode desktop dovecot dumper falken fax foo ftp games gopher hostmaster info ingres lp manager marketing moof moog news nfsnobody nobody noc nscd nut ntp office operator ops pcap postgres privoxy pvm radiusd radvd rpc rpcuser rpm sales smmsp staff squid support sync system tech toor usenet uucp vcsa webalizer wnn www xfs"
+    for ALIAS in $SILLYALIASES; do
+        CHECK=`grep "^$ALIAS:" /etc/aliases`
+        if [ -n "$CHECK" ]; then
+            logger -p local6.notice -t installer "app-smtp-core - disabling obscure alias: $ALIAS"
+            sed -i -e "s/^$ALIAS/# $ALIAS/" /etc/aliases
+        fi
+    done
+    /usr/bin/newaliases
+fi
+
 # Set default start/boot
 #-----------------------
 
@@ -31,4 +46,8 @@ logger -p local6.notice -t installer "app-smtp-core - enabling SMTP server"
 chkconfig postfix on
 
 logger -p local6.notice -t installer "app-smtp-core - starting SMTP server"
-service postfix start
+if [ -z `/sbin/pidof master` ]; then
+    service postfix start
+else
+    service postfix condrestart
+fi

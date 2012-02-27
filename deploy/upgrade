@@ -1,5 +1,15 @@
 #!/bin/sh
 
+# PAM check
+#----------
+
+CHECK=`grep clearos/smtp.d /etc/pam.d/smtp.postfix`
+if [ -z "$CHECK" ]; then
+    logger -p local6.notice -t installer "app-smtp-core - applying PAM configuration"
+    [ -e /etc/pam.d/smtp.postfix ] && cp /etc/pam.d/smtp.postfix /var/clearos/smtp/backup/smtp.postfix.pam.$TIMESTAMP
+    cp /usr/clearos/apps/smtp/deploy/smtp.pam /etc/pam.d/smtp.postfix
+fi
+
 # Update configlets with LDAP information
 #----------------------------------------
 
@@ -12,7 +22,7 @@ KEY_SOURCE=/etc/pki/CA/bootstrap.key
 KEY=/etc/postfix/key.pem
 
 if [ ! -s "$KEY" ]; then
-    logger -p local6.notice -t installer "app-mail-filter-core - prepping server key"
+    logger -p local6.notice -t installer "app-smtp-core - prepping server key"
     cp $KEY_SOURCE $KEY
     chown root.root $KEY
     chmod 600 $KEY
@@ -22,7 +32,7 @@ CRT_SOURCE=/etc/pki/CA/bootstrap.crt
 CRT=/etc/postfix/cert.pem
 
 if [ ! -s "$CRT" ]; then
-    logger -p local6.notice -t installer "app-mail-filter-core - prepping server certificate"
+    logger -p local6.notice -t installer "app-smtp-core - prepping server certificate"
     cp $CRT_SOURCE $CRT
     chown root.root $CRT
     chmod 600 $CRT

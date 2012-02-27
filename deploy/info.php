@@ -49,6 +49,7 @@ $app['core_requires'] = array(
 
 $app['core_file_manifest'] = array(
     'postfix.php'=> array('target' => '/var/clearos/base/daemon/postfix.php'),
+    'authorize'=> array('target' => '/etc/clearos/smtp.d/authorize'),
     'mailprefilter' => array(
         'target' => '/usr/sbin/mailprefilter',
         'mode' => '0755',
@@ -64,7 +65,7 @@ $app['core_file_manifest'] = array(
 );
 
 $app['core_directory_manifest'] = array(
+   '/etc/clearos/smtp.d' => array(),
    '/var/clearos/smtp' => array(),
    '/var/clearos/smtp/backup' => array(),
 );
-

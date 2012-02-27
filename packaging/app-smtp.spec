@@ -39,8 +39,10 @@ This package provides the core API and libraries.
 mkdir -p -m 755 %{buildroot}/usr/clearos/apps/smtp
 cp -r * %{buildroot}/usr/clearos/apps/smtp/
 
+install -d -m 0755 %{buildroot}/etc/clearos/smtp.d
 install -d -m 0755 %{buildroot}/var/clearos/smtp
 install -d -m 0755 %{buildroot}/var/clearos/smtp/backup
+install -D -m 0644 packaging/authorize %{buildroot}/etc/clearos/smtp.d/authorize
 install -D -m 0755 packaging/mailpostfilter %{buildroot}/usr/sbin/mailpostfilter
 install -D -m 0755 packaging/mailprefilter %{buildroot}/usr/sbin/mailprefilter
 install -D -m 0644 packaging/postfix.php %{buildroot}/var/clearos/base/daemon/postfix.php
@@ -83,11 +85,13 @@ exit 0
 %exclude /usr/clearos/apps/smtp/packaging
 %exclude /usr/clearos/apps/smtp/tests
 %dir /usr/clearos/apps/smtp
+%dir /etc/clearos/smtp.d
 %dir /var/clearos/smtp
 %dir /var/clearos/smtp/backup
 /usr/clearos/apps/smtp/deploy
 /usr/clearos/apps/smtp/language
 /usr/clearos/apps/smtp/libraries
+/etc/clearos/smtp.d/authorize
 /usr/sbin/mailpostfilter
 /usr/sbin/mailprefilter
 /var/clearos/base/daemon/postfix.php
