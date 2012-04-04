@@ -39,6 +39,11 @@ if [ -f /etc/aliases ]; then
     /usr/bin/newaliases
 fi
 
+# Initialize domain name with default
+#------------------------------------
+
+/usr/clearos/app/smtp/deploy/initialize
+
 # Set default start/boot
 #-----------------------
 
@@ -51,3 +56,4 @@ if [ -z `/sbin/pidof master` ]; then
 else
     service postfix condrestart
 fi
+
