@@ -46,6 +46,7 @@ require_once $bootstrap . '/bootstrap.php';
 // T R A N S L A T I O N S
 ///////////////////////////////////////////////////////////////////////////////
 
+clearos_load_language('network');
 clearos_load_language('smtp');
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -68,6 +69,7 @@ clearos_load_library('network/Network_Utils');
 // Exceptions
 //-----------
 
+use \Exception as Exception;
 use \clearos\apps\base\Engine_Exception as Engine_Exception;
 use \clearos\apps\base\File_Not_Found_Exception as File_Not_Found_Exception;
 use \clearos\apps\base\Validation_Exception as Validation_Exception;
@@ -139,10 +141,6 @@ class Postfix extends Daemon
         parent::__construct('postfix');
     }
 
-    ///////////////////////////////////////////////////////////////////////////
-    // M A I N  M E T H O D S                                                //
-    ///////////////////////////////////////////////////////////////////////////
-
     /**
      * Adds a destination domain.
      *
@@ -203,7 +201,6 @@ class Postfix extends Daemon
     {
         clearos_profile(__METHOD__, __LINE__);
 
-        // FIXME: network with a prefix is not working 
         Validation_Exception::is_valid($this->validate_trusted_network($network));
 
         $this->_add_list_item('mynetworks', ',', $network);
@@ -230,13 +227,14 @@ class Postfix extends Daemon
 
         $this->_add_list_item('recipient_bcc_maps', ',', 'hash:' . $filename);
     }
+
     /**
      * Add a file to use to match for sender BCC.
      *
-     * @param  array  $filename  the filename to be used to match sender BCC address
+     * @param array $filename filename to be used to match sender BCC address
      *
-     * @return  void
-     * @throws  Validation_Exception, Engine_Exception
+     * @return void
+     * @throws Validation_Exception, Engine_Exception
      */
 
     public function add_sender_bcc_maps($filename)
@@ -331,34 +329,28 @@ class Postfix extends Daemon
     /**
      * Deletes a trusted network.
      *
-     * @param string $trustednetwork trusted network for relaying
+     * @param string $network trusted network for relaying
      *
      * @return void
      * @throws Validation_Exception, Engine_Exception
      */
 
-    public function delete_trusted_network($trustednetwork)
+    public function delete_trusted_network($network)
     {
         clearos_profile(__METHOD__, __LINE__);
 
         Validation_Exception::is_valid($this->validate_trusted_network($network));
 
-        // Prevent deletion of localhost
-        //------------------------------
-
-        // if ($trustednetwork == self::LOCALHOST)
-        //   throw new Validation_Exception(POSTFIX_LANG_ERRMSG_LOCALHOST);
-
-        $this->_delete_list_item('mynetworks', ',', $trustednetwork);
+        $this->_delete_list_item('mynetworks', ',', $network);
     }
 
     /**
      * Deletes a recipient BCC mapping.
      *
-     * @param  string  $filename  recipient bcc map file
+     * @param string $filename recipient bcc map file
      *
-     * @return  void
-     * @throws  Validation_Exception, Engine_Exception
+     * @return void
+     * @throws Validation_Exception, Engine_Exception
      */
 
     public function delete_recipient_bcc_maps($filename)
@@ -375,10 +367,10 @@ class Postfix extends Daemon
     /**
      * Deletes a sender BCC mapping.
      *
-     * @param  string  $filename  sender bcc map file
+     * @param string $filename sender bcc map file
      *
-     * @return  void
-     * @throws  Validation_Exception, Engine_Exception
+     * @return void
+     * @throws Validation_Exception, Engine_Exception
      */
 
     public function delete_sender_bcc_maps($filename)
@@ -394,7 +386,6 @@ class Postfix extends Daemon
 
     /**
      * Flushes the mail queue.
-     *
      *
      * @return void
      * @throws Engine_Exception
@@ -443,6 +434,31 @@ class Postfix extends Daemon
             $this->_load_config();
 
         return $this->config['luser_relay'];
+    }
+
+    /**
+     * Returns list of potential catch all users.
+     *
+     * @return array catch all users
+     * @throws Engine_Exception
+     */
+
+    public function get_catch_all_users()
+    {
+        clearos_profile(__METHOD__, __LINE__);
+
+        $users = array();
+/*
+
+        if (clearos_load_library('users/User_Manager_Factory')) {
+            $user_manager = \clearos\apps\users\User_Manager_Factory::create();
+            $users = $user_manager->get_list();
+        }
+
+        print_r($users);
+*/
+
+        return $users;
     }
 
     /**
@@ -514,8 +530,8 @@ class Postfix extends Daemon
     /**
      * Returns list of mail forwarder.
      *
-     * @return array  hashed list of forwarded domain
-     * @throws  Engine_Exception
+     * @return array hashed list of forwarded domain
+     * @throws Engine_Exception
      */
 
     public function get_forwarders()
@@ -697,7 +713,7 @@ class Postfix extends Daemon
     /**
      * Returns the recipient_bcc_maps.
      *
-     * @param  string $filename the filename of the map file
+     * @param string $filename the filename of the map file
      *
      * @return array contents of file as an array
      * @throws Engine_Exception
@@ -707,7 +723,7 @@ class Postfix extends Daemon
     {
         clearos_profile(__METHOD__, __LINE__);
 
-        $contents = Array();
+        $contents = array();
         
         $file = new File($filename);
 
@@ -718,10 +734,31 @@ class Postfix extends Daemon
     }
 
     /**
+     * Returns first relay host.
+     *
+     * This is a legacy method call.
+     *
+     * @return string first relay host
+     * @throws Engine_Exception
+     */
+
+    public function get_relay_host()
+    {
+        clearos_profile(__METHOD__, __LINE__);
+
+        $hosts = $this->get_relay_hosts();
+
+        if ($hosts[0])
+            return preg_replace('/:.*/', '', $hosts[0]);
+        else
+            return '';
+    }
+
+    /**
      * Returns relay hosts.
      *
-     * @return array  array of relay hosts
-     * @throws  Engine_Exception
+     * @return array array of relay hosts
+     * @throws Engine_Exception
      */
 
     public function get_relay_hosts()
@@ -771,6 +808,8 @@ class Postfix extends Daemon
     /**
      * Returns the sender_bcc_maps.
      *
+     * @param string $filename maps filename
+     *
      * @return string the file that maps senders to BCC
      * @throws Engine_Exception
      */
@@ -779,7 +818,7 @@ class Postfix extends Daemon
     {
         clearos_profile(__METHOD__, __LINE__);
 
-        $contents = Array();
+        $contents = array();
         
         $file = new File($filename);
 
@@ -792,9 +831,8 @@ class Postfix extends Daemon
     /**
      * Get SMTP authentication state.
      *
-     *
-     * @return boolean  TRUE if SMTP authentication is enabled
-     * @throws  Engine_Exception
+     * @return boolean TRUE if SMTP authentication is enabled
+     * @throws Engine_Exception
      */
 
     public function get_smtp_authentication_state()
@@ -844,15 +882,14 @@ class Postfix extends Daemon
     /**
      * Returns trusted networks for relaying.
      *
-     * @return array  array of trusted networks for relaying
-     * @throws  Engine_Exception
+     * @return array array of trusted networks for relaying
+     * @throws Engine_Exception
      */
 
     public function get_trusted_networks()
     {
         clearos_profile(__METHOD__, __LINE__);
 
-        $list = array();
         $list = $this->_get_list_items('mynetworks', ',');
 
         return $list;
@@ -974,41 +1011,18 @@ class Postfix extends Daemon
      * @throws Validation_Exception, Engine_Exception
      */
 
-    public function set_max_mailbox_size($size)
-    {
-        clearos_profile(__METHOD__, __LINE__);
-
-        if (! preg_match("/^(\d)+$/", $size))
-            throw new Validation_Exception(POSTFIX_LANG_MAILBOX_SIZE . " - " . LOCALE_LANG_INVALID);
-
-        $this->_set_parameter('mailbox_size_limit', $size);
-    }
-
-    /**
-     * Set the maximum message size (in bytes).
-     * Note: you should set the antivirus and/or antispam message
-     * size limits if required.
-     *
-     * @param int  $size  message size in bytes
-     *
-     * @return void
-     * @throws  Validation_Exception, Engine_Exception
-     */
-
     public function set_max_message_size($size)
     {
         clearos_profile(__METHOD__, __LINE__);
 
-        // Validate
-        //---------
-
-        if (! preg_match("/^(\d)+$/", $size))
-            throw new Validation_Exception(POSTFIX_LANG_MESSAGE_SIZE . " - " . LOCALE_LANG_INVALID);
+        Validation_Exception::is_valid($this->validate_max_message_size($max_message_size));
 
         // Make sure mailbox_size_limit is bigger than message_size_limit
         //---------------------------------------------------------------
 
-        $mailbox_size_limit = $this->GetMaxMailboxSize();
+//FIXME
+
+        $mailbox_size_limit = $this->get_max_mailbox_size();
 
         if ($mailbox_size_limit < $size)
             $this->_set_parameter('mailbox_size_limit', $size);
@@ -1022,20 +1036,22 @@ class Postfix extends Daemon
     /**
      * Set the recipient_bcc_maps parameter.
      *
-     * @param  string $filename the filename of the map file
-     * @param  array $map  an array containing the mapping for mail accounts and the bcc recipient
+     * @param string  $filename filename of the map file
+     * @param array   $map      array containing the mapping for mail accounts and the bcc recipient
+     * @param boolean $replace  replace flag
      *
-     * @return  void
-     * @throws  Validation_Exception, Engine_Exception
+     * @return void
+     * @throws Validation_Exception, Engine_Exception
      */
 
     public function set_recipient_bcc_maps($filename, $map, $replace = FALSE)
     {
         clearos_profile(__METHOD__, __LINE__);
 
-        // On purpose, we don't add entry to the the recipient_bcc_maps directive...do this with 'AddRecipientBcc' method
-        $contents = Array();
-        $newcontents = Array();
+        // On purpose, we don't add entry to the the recipient_bcc_maps directive.
+        // Do this with 'AddRecipientBcc' method
+        $contents = array();
+        $newcontents = array();
         $data = "";
 
         // Make sure file exists
@@ -1091,11 +1107,12 @@ class Postfix extends Daemon
     /**
      * Set the sender_bcc_maps parameter.
      *
-     * @param  string $filename the filename of the map file
-     * @param  array $map  an array containing the mapping for mail accounts and the bcc sender
+     * @param string  $filename filename of the map file
+     * @param array   $map      array containing the mapping for mail accounts and the bcc sender
+     * @param boolean $replace  replace flag
      *
-     * @return  void
-     * @throws  Validation_Exception, Engine_Exception
+     * @return void
+     * @throws Validation_Exception, Engine_Exception
      */
 
     public function set_sender_bcc_maps($filename, $map, $replace = FALSE)
@@ -1103,8 +1120,8 @@ class Postfix extends Daemon
         clearos_profile(__METHOD__, __LINE__);
 
         // On purpose, we don't add entry to the the sender_bcc_maps directive...do this with 'AddSenderBcc' method
-        $contents = Array();
-        $newcontents = Array();
+        $contents = array();
+        $newcontents = array();
         $data = "";
 
         // Make sure file exists
@@ -1138,8 +1155,8 @@ class Postfix extends Daemon
     /** 
      * Sets a policy service eg a greylist.
      *
-     * @param string $service policy service name
-     * @param boolean $state state of policy service
+     * @param string  $service policy service name
+     * @param boolean $state   state of policy service
      *
      * @return void
      * @throws Engine_Exception
@@ -1187,10 +1204,10 @@ class Postfix extends Daemon
     /**
      * Sets SMTP port to bind to/listen on.
      *
-     * @param int  $port  port to bind to
+     * @param integer $port port to bind to
      *
      * @return void
-     * @throws  Validation_Exception, Engine_Exception
+     * @throws Validation_Exception, Engine_Exception
      */
 
     public function set_smtp_port($port)
@@ -1223,7 +1240,7 @@ class Postfix extends Daemon
      * Validation routine for destination domain name.
      *
      * @param string  $domain       domain name.
-     * @param boolean $check_exists 
+     * @param boolean $check_exists check if destination exists
      *
      * @return boolean error message if domain is invalid
      */
@@ -1233,7 +1250,7 @@ class Postfix extends Daemon
         clearos_profile(__METHOD__, __LINE__);
 
         if (! Network_Utils::is_valid_domain($domain))
-            return lang('smtp_domain_is_invalid');
+            return lang('smtp_domain_invalid');
 
         if ($check_exists) {
             $destinations = $this->get_destinations();
@@ -1256,7 +1273,7 @@ class Postfix extends Daemon
         clearos_profile(__METHOD__, __LINE__);
 
         if (! Network_Utils::is_valid_domain($domain))
-            return lang('smtp_domain_is_invalid');
+            return lang('network_domain_invalid');
     }
 
     /**
@@ -1272,7 +1289,7 @@ class Postfix extends Daemon
         clearos_profile(__METHOD__, __LINE__);
 
         if (!preg_match('/^.*@localhost$|^[a-z0-9\._-]+@+[a-z0-9\._-]+\.+[a-z]{2,4}$/', $email))
-            return lang('smtp_email_address_is_invalid');
+            return lang('smtp_email_address_invalid');
     }
 
     /**
@@ -1288,7 +1305,7 @@ class Postfix extends Daemon
         clearos_profile(__METHOD__, __LINE__);
 
         if (! Network_Utils::is_valid_domain($domain))
-            return lang('smtp_domain_is_invalid');
+            return lang('smtp_domain_invalid');
 
         $forwarders = $this->get_forwarders();
 
@@ -1299,19 +1316,34 @@ class Postfix extends Daemon
     }
 
     /**
-     * Validation routine for server target.
+     * Validation routine for hostname.
      *
-     * @param string $server server
+     * @param string $hostname hostnam
      *
-     * @return string error message if server is invalid
+     * @return boolean error message if hostname is invalid
      */
 
-    public function validate_server($server)
+    public function validate_hostname($hostname)
     {
         clearos_profile(__METHOD__, __LINE__);
 
-        if ((! Network_Utils::is_valid_ip($server)) && (! Network_Utils::is_valid_domain($server)))
-            return lang('smtp_server_is_invalid');
+        if (! Network_Utils::is_valid_hostname($hostname))
+            return lang('network_hostname_invalid');
+    }
+
+    /**
+     * Validation routine for max message size.
+     *
+     * @param integer $size max message size
+     *
+     * @return boolean error message if max message size is invalid
+     */
+
+    public function validate_max_message_size($size)
+    {
+        clearos_profile(__METHOD__, __LINE__);
+
+        // FIXME
     }
 
     /**
@@ -1327,7 +1359,7 @@ class Postfix extends Daemon
         clearos_profile(__METHOD__, __LINE__);
 
         if ((! Network_Utils::is_valid_port($port)))
-            return lang('smtp_port_is_invalid');
+            return lang('smtp_port_invalid');
     }
 
     /**
@@ -1346,7 +1378,39 @@ class Postfix extends Daemon
             return;
 
         if ((! Network_Utils::is_valid_ip($host)) && (! Network_Utils::is_valid_domain($host)))
-            return lang('smtp_host_is_invalid');
+            return lang('smtp_relay_host_invalid');
+    }
+
+    /**
+     * Validation routine for server target.
+     *
+     * @param string $server server
+     *
+     * @return string error message if server is invalid
+     */
+
+    public function validate_server($server)
+    {
+        clearos_profile(__METHOD__, __LINE__);
+
+        if ((! Network_Utils::is_valid_ip($server)) && (! Network_Utils::is_valid_domain($server)))
+            return lang('smtp_server_invalid');
+    }
+
+    /**
+     * Validation routine for SMTP authentication state.
+     *
+     * @param boolean $state state
+     *
+     * @return string error message if SMTP authentication state is invalid
+     */
+
+    public function validate_smtp_authentication_state($state)
+    {
+        clearos_profile(__METHOD__, __LINE__);
+
+        if (! clearos_is_valid_boolean($state))
+            return lang('smtp_smtp_authentication_state_invalid');
     }
 
     /**
@@ -1364,13 +1428,13 @@ class Postfix extends Daemon
         clearos_profile(__METHOD__, __LINE__);
 
         if ((! Network_Utils::is_valid_network($network)) && (! Network_Utils::is_valid_ip($network)))
-            return lang('smtp_trusted_network_is_invalid');
+            return lang('smtp_trusted_network_invalid');
     }
 
     /**
      * Validation routine for user.
      *
-     * @param string $user username or email address
+     * @param string $username username or email address
      *
      * @return string error message if user is invalid
      */
@@ -1381,7 +1445,7 @@ class Postfix extends Daemon
 
         // FIXME
         if (preg_match("/;/", $username))
-            return lang('smtp_username_is_invalid');
+            return lang('smtp_username_invalid');
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -1391,11 +1455,11 @@ class Postfix extends Daemon
     /**
      * Adds an item to a list.
      *
-     * @access private
-     * @param string $key parameter name in the configuration file
+     * @param string $key       parameter name in the configuration file
      * @param string $delimiter delimiter used for the given key
-     * @param string $newitem item to add to list
+     * @param string $newitem   item to add to list
      *
+     * @access private
      * @return boolean TRUE if item already exists
      * @throws Validation_Exception, Engine_Exception
      */
@@ -1430,11 +1494,11 @@ class Postfix extends Daemon
     /**
      * Deletes an item from a given list.
      *
-     * @access private
-     * @param string $key parameter name in the configuration file
+     * @param string $key       parameter name in the configuration file
      * @param string $delimiter delimiter used for the given key
-     * @param string $olditem item to delete from list
+     * @param string $olditem   item to delete from list
      *
+     * @access private
      * @return void
      * @throws Engine_Exception
      */
@@ -1512,9 +1576,8 @@ class Postfix extends Daemon
      * Returns the state of a sender/recipient restriction.
      * 
      * @param string $parameter configuration parameter (eg smtpd_recipient_restrictions)
-     * @param string $type type of restriction (eg check_sender_access)
-     * @param string $value value for given type
-     * @param boolean $state state
+     * @param string $type      type of restriction (eg check_sender_access)
+     * @param string $value     value for given type
      *
      * @return void
      * @throws Engine_Exception
@@ -1600,10 +1663,10 @@ class Postfix extends Daemon
      * - smtpd_recipient_restrictions = check_policy_service unix:/var/spool/postgrey...
      * - smtpd_sender_restrictions = check_sender_access hash:/etc/postfix/filters/sa-blacklist
      *
-     * @param string $parameter configuration parameter (eg smtpd_recipient_restrictions)
-     * @param string $type type of restriction (eg check_sender_access)
-     * @param string $value value for given type
-     * @param boolean $state state
+     * @param string  $parameter configuration parameter (eg smtpd_recipient_restrictions)
+     * @param string  $type      type of restriction (eg check_sender_access)
+     * @param string  $value     value for given type
+     * @param boolean $state     state
      *
      * @return void
      * @throws Engine_Exception
@@ -1627,10 +1690,10 @@ class Postfix extends Daemon
     /**
      * Sets a value for a parameter.
      *
-     * @access private
-     * @param string $key key name
+     * @param string $key   key name
      * @param string $value value for the key
      *
+     * @access private
      * @return void
      * @throws Engine_Exception
      */
@@ -1640,7 +1703,7 @@ class Postfix extends Daemon
         clearos_profile(__METHOD__, __LINE__);
 
         $shell = new Shell();
-        $shell->Execute(self::COMMAND_POSTCONF, "-e '$key=$value'", TRUE);
+        $shell->execute(self::COMMAND_POSTCONF, "-e '$key=$value'", TRUE);
 
         $this->is_loaded = FALSE;
     }

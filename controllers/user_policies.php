@@ -1,13 +1,13 @@
 <?php
 
 /**
- * SMTP general settings controller.
+ * User policies controller.
  *
  * @category   Apps
  * @package    SMTP
  * @subpackage Controllers
  * @author     ClearFoundation <developer@clearfoundation.com>
- * @copyright  2011 ClearFoundation
+ * @copyright  2012 ClearFoundation
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License version 3 or later
  * @link       http://www.clearfoundation.com/docs/developer/apps/smtp/
  */
@@ -34,39 +34,72 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 /**
- * SMTP general settings controller.
+ * User policies controller.
  *
  * @category   Apps
  * @package    SMTP
  * @subpackage Controllers
  * @author     ClearFoundation <developer@clearfoundation.com>
- * @copyright  2011 ClearFoundation
+ * @copyright  2012 ClearFoundation
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License version 3 or later
  * @link       http://www.clearfoundation.com/docs/developer/apps/smtp/
  */
 
-class General extends ClearOS_Controller
+class User_Policies extends ClearOS_Controller
 {
     /**
-     * SMTP default controller
+     * Settings default controller.
      *
      * @return view
      */
 
-    // FIXME: probably could lose the layout?
+    function index()
+    {
+        $this->view();
+    }
 
-    function index($mode = 'edit')
+    /**
+     * Edit view.
+     *
+     * @return view
+     */
+
+    function edit()
+    {
+        $this->_item('edit');
+    }
+
+    /**
+     * View view.
+     *
+     * @return view
+     */
+
+    function view()
+    {
+        $this->_item('view');
+    }
+
+    /**
+     * Common view/edit view.
+     *
+     * @param string $form_type form type
+     *
+     * @return view
+     */
+
+    function _item($form_type)
     {
         // Load libraries
         //---------------
 
+        $this->lang->load('smtp');
         $this->load->library('smtp/Postfix');
 
         // Set validation rules
         //---------------------
-/*
          
-        $this->form_validation->set_policy('timezone', 'date/Time', 'validate_time_zone', TRUE);
+        $this->form_validation->set_policy('smtp_authentication', 'smtp/Postfix', 'validate_smtp_authentication_state', TRUE);
         $form_ok = $this->form_validation->run();
 
         // Handle form submit
@@ -74,26 +107,25 @@ class General extends ClearOS_Controller
 
         if (($this->input->post('submit') && $form_ok)) {
             try {
-                $this->time->set_time_zone($this->input->post('timezone'));
+                $this->postfix->set_smtp_authentication_state($this->input->post('smtp_authentication'));
+
+                $this->postfix->reset();
+
                 $this->page->set_status_updated();
+                redirect('/smtp/settings');
             } catch (Engine_Exception $e) {
                 $this->page->view_exception($e->get_message());
                 return;
             }
         }
-*/
 
         // Load view data
         //---------------
 
         try {
-            $data['mode'] = $mode;
-            $data['domain'] = $this->postfix->get_domain();
-            $data['hostname'] = $this->postfix->get_hostname();
-            $data['relay_hosts'] = $this->postfix->get_relay_hosts();
+            $data['form_type'] = $form_type;
             $data['catch_all'] = $this->postfix->get_catch_all();
-            $data['catch_alls'] = array('alex@example.com', 'bob@example.com', 'tim@example.com'); // FIXME - pull from LDAP
-            $data['max_message_size'] = $this->postfix->get_max_message_size();
+            $data['catch_alls'] = $this->postfix->get_catch_all_users();
             $data['smtp_authentication'] = $this->postfix->get_smtp_authentication_state();
         } catch (Exception $e) {
             $this->page->view_exception($e);
@@ -103,6 +135,6 @@ class General extends ClearOS_Controller
         // Load views
         //-----------
 
-        $this->page->view_form('general/view_edit', $data);
+        $this->page->view_form('smtp/user_policies', $data, lang('smtp_user_policies'));
     }
 }

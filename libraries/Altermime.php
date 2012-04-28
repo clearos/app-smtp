@@ -7,7 +7,7 @@
  * @package    SMTP
  * @subpackage Libraries
  * @author     ClearFoundation <developer@clearfoundation.com>
- * @copyright  2006-2011 ClearFoundation
+ * @copyright  2006-2012 ClearFoundation
  * @license    http://www.gnu.org/copyleft/lgpl.html GNU Lesser General Public License version 3 or later
  * @link       http://www.clearfoundation.com/docs/developer/apps/smtp/
  */
@@ -81,7 +81,7 @@ clearos_load_library('base/Validation_Exception');
  * @package    SMTP
  * @subpackage Libraries
  * @author     ClearFoundation <developer@clearfoundation.com>
- * @copyright  2006-2011 ClearFoundation
+ * @copyright  2006-2012 ClearFoundation
  * @license    http://www.gnu.org/copyleft/lgpl.html GNU Lesser General Public License version 3 or later
  * @link       http://www.clearfoundation.com/docs/developer/apps/smtp/
  */
@@ -223,7 +223,7 @@ class Altermime extends Software
         $plaintext = strip_tags(html_entity_decode($text));
 
         if ($plaintext != $text)
-            return lang('smtp_mail_disclaimer_is_invalid');
+            return lang('smtp_mail_disclaimer_invalid');
     }
 
     /**
@@ -238,7 +238,7 @@ class Altermime extends Software
     {
         clearos_profile(__METHOD__, __LINE__);
 
-        // if FIXME
-        // return lang('smtp_mail_disclaimer_state_is_invalid');
+        if (! clearos_is_valid_boolean($state))
+            return lang('smtp_mail_disclaimer_state_invalid');
     }
 }

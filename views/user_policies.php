@@ -40,7 +40,7 @@ $this->lang->load('base');
 // Form handler
 ///////////////////////////////////////////////////////////////////////////////
 
-if ($mode === 'edit') {
+if ($form_type === 'edit') {
     $read_only = FALSE;
     $buttons = array(
         form_submit_update('submit'),
@@ -48,43 +48,20 @@ if ($mode === 'edit') {
     );
 } else {
     $read_only = TRUE;
-    $buttons = array(anchor_edit('/app/smtp/general'));
+    $buttons = array(anchor_edit('/app/smtp/user_policies/edit'));
 }
 
-$max_message_sizes = array();
-$max_message_sizes['1024000'] = '1 ' . lang('base_megabytes');
-$max_message_sizes['2048000'] = '2 ' . lang('base_megabytes');
-$max_message_sizes['5120000'] = '5 ' . lang('base_megabytes');
-$max_message_sizes['10240000'] = '10 ' . lang('base_megabytes');
-$max_message_sizes['20480000'] = '20 ' . lang('base_megabytes');
-$max_message_sizes['30720000'] = '30 ' . lang('base_megabytes');
-$max_message_sizes['40960000'] = '40 ' . lang('base_megabytes');
-$max_message_sizes['51200000'] = '50 ' . lang('base_megabytes');
-$max_message_sizes['102400000'] = '100 ' . lang('base_megabytes');
-
 ///////////////////////////////////////////////////////////////////////////////
-// Form open
+// Form
 ///////////////////////////////////////////////////////////////////////////////
 
-echo form_open('smtp');
-echo form_header(lang('base_settings'));
+echo form_open('/smtp/user_policies/edit');
+echo form_header(lang('smtp_user_policies'));
 
-///////////////////////////////////////////////////////////////////////////////
-// Form fields and buttons
-///////////////////////////////////////////////////////////////////////////////
-
-echo field_input('domain', $domain, lang('smtp_domain'), TRUE);
-echo field_input('hostname', $domain, lang('smtp_hostname'), $read_only);
 echo field_toggle_enable_disable('smtp_authentication', $smtp_authentication, lang('smtp_smtp_authentication'), $read_only);
-echo field_dropdown('max_message_size', $max_message_sizes, $max_message_size, lang('smtp_maximum_message_size'), $read_only);
-// FIXME: implement user list
 echo field_simple_dropdown('catch_all', $catch_alls, $catch_all, lang('smtp_catch_all'), $read_only);
 
 echo field_button_set($buttons);
-
-///////////////////////////////////////////////////////////////////////////////
-// Form close
-///////////////////////////////////////////////////////////////////////////////
 
 echo form_footer();
 echo form_close();

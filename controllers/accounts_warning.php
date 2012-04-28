@@ -1,13 +1,13 @@
 <?php
 
 /**
- * SMTP controller.
+ * Accounts warning controller.
  *
  * @category   Apps
  * @package    SMTP
  * @subpackage Controllers
  * @author     ClearFoundation <developer@clearfoundation.com>
- * @copyright  2011 ClearFoundation
+ * @copyright  2012 ClearFoundation
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License version 3 or later
  * @link       http://www.clearfoundation.com/docs/developer/apps/smtp/
  */
@@ -34,47 +34,29 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 /**
- * SMTP controller.
+ * Accounts warning controller.
  *
  * @category   Apps
  * @package    SMTP
  * @subpackage Controllers
  * @author     ClearFoundation <developer@clearfoundation.com>
- * @copyright  2011 ClearFoundation
+ * @copyright  2012 ClearFoundation
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License version 3 or later
  * @link       http://www.clearfoundation.com/docs/developer/apps/smtp/
  */
 
-class SMTP extends ClearOS_Controller
+class Accounts_Warning extends ClearOS_Controller
 {
-	/**
-	 * SMTP server overview.
-	 */
+    /**
+     * Settings default controller.
+     *
+     * @return view
+     */
 
-	function index()
-	{
-		// Load libraries
-		//---------------
+    function index()
+    {
+        $this->lang->load('base');
 
-		$this->lang->load('smtp');
-
-		// Load views
-		//-----------
-
-        $views = array('smtp/settings', 'smtp/trusted');
-
-        if (clearos_app_installed('accounts')) {
-            $this->load->module('accounts/status');
-
-            if ($this->status->unhappy()) {
-                array_unshift($views, 'smtp/accounts_warning');
-            } else {
-                $views[] = 'smtp/user_policies';
-            }
-
-            // $views = array('smtp/settings', 'smtp/relay', 'smtp/trusted');
-        }
-
-        $this->page->view_forms($views, lang('smtp_smtp_server'));
-	}
+        $this->page->view_form('smtp/accounts_warning', NULL, lang('base_warning'));
+    }
 }

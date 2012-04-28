@@ -26,7 +26,7 @@ $app['subcategory'] = lang('base_subcategory_mail');
 /////////////////////////////////////////////////////////////////////////////
 
 $app['controllers']['smtp']['title'] = lang('smtp_app_name');
-$app['controllers']['general']['title'] = lang('base_general_settings');
+$app['controllers']['general']['title'] = lang('base_settings');
 $app['controllers']['trusted']['title'] = lang('smtp_trusted_networks');
 
 /////////////////////////////////////////////////////////////////////////////
