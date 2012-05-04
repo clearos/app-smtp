@@ -1,7 +1,7 @@
 
 Name: app-smtp
 Epoch: 1
-Version: 1.0.5
+Version: 1.1.0
 Release: 1%{dist}
 Summary: SMTP Server
 License: GPLv3
@@ -16,18 +16,19 @@ Requires: app-network
 SMTP Server description...
 
 %package core
-Summary: SMTP Server - APIs and install
+Summary: SMTP Server - Core
 License: LGPLv3
 Group: ClearOS/Libraries
 Requires: app-base-core
 Requires: app-certificate-manager-core
-Requires: app-network-core
+Requires: app-network-core >= 1:1.1.1
 Requires: app-smtp-plugin-core
 Requires: cyrus-sasl-plain
 Requires: mailx >= 12.4
 Requires: php-pear-Net-LMTP
 Requires: php-pear-Net-SMTP
 Requires: postfix >= 2.6.6
+Requires: webconfig-php-imap
 
 %description core
 SMTP Server description...
@@ -45,6 +46,7 @@ cp -r * %{buildroot}/usr/clearos/apps/smtp/
 install -d -m 0755 %{buildroot}/etc/clearos/smtp.d
 install -d -m 0755 %{buildroot}/var/clearos/smtp
 install -d -m 0755 %{buildroot}/var/clearos/smtp/backup
+install -d -m 0755 %{buildroot}/var/spool/filter
 install -D -m 0644 packaging/authorize %{buildroot}/etc/clearos/smtp.d/authorize
 install -D -m 0755 packaging/mailpostfilter %{buildroot}/usr/sbin/mailpostfilter
 install -D -m 0755 packaging/mailprefilter %{buildroot}/usr/sbin/mailprefilter
@@ -91,6 +93,7 @@ exit 0
 %dir /etc/clearos/smtp.d
 %dir /var/clearos/smtp
 %dir /var/clearos/smtp/backup
+%dir /var/spool/filter
 /usr/clearos/apps/smtp/deploy
 /usr/clearos/apps/smtp/language
 /usr/clearos/apps/smtp/libraries

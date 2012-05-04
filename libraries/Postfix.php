@@ -263,9 +263,9 @@ class Postfix extends Daemon
     {
         clearos_profile(__METHOD__, __LINE__);
 
-        Validation_Exception::is_valid($this->validate_destination_domain($domain));
+        Validation_Exception::is_valid($this->validate_destination_domain($domain, FALSE));
 
-        $this->_delete_list_item('mydestination', ',', $destination);
+        $this->_delete_list_item('mydestination', ',', $domain);
     }
 
     /**
@@ -448,15 +448,11 @@ class Postfix extends Daemon
         clearos_profile(__METHOD__, __LINE__);
 
         $users = array();
-/*
 
         if (clearos_load_library('users/User_Manager_Factory')) {
             $user_manager = \clearos\apps\users\User_Manager_Factory::create();
             $users = $user_manager->get_list();
         }
-
-        print_r($users);
-*/
 
         return $users;
     }

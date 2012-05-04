@@ -5,7 +5,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 $app['basename'] = 'smtp';
-$app['version'] = '1.0.5';
+$app['version'] = '1.1.0';
 $app['release'] = '1';
 $app['vendor'] = 'ClearFoundation';
 $app['packager'] = 'ClearFoundation';
@@ -26,8 +26,10 @@ $app['subcategory'] = lang('base_subcategory_mail');
 /////////////////////////////////////////////////////////////////////////////
 
 $app['controllers']['smtp']['title'] = lang('smtp_app_name');
-$app['controllers']['general']['title'] = lang('base_settings');
+$app['controllers']['settings']['title'] = lang('base_settings');
 $app['controllers']['trusted']['title'] = lang('smtp_trusted_networks');
+$app['controllers']['domains']['title'] = lang('smtp_destination_domains');
+$app['controllers']['user_policies']['title'] = lang('smtp_user_policies');
 
 /////////////////////////////////////////////////////////////////////////////
 // Packaging
@@ -39,13 +41,14 @@ $app['requires'] = array(
 
 $app['core_requires'] = array(
     'app-certificate-manager-core',
-    'app-network-core',
+    'app-network-core >= 1:1.1.1',
     'app-smtp-plugin-core',
     'cyrus-sasl-plain',
     'mailx >= 12.4',
     'php-pear-Net-LMTP',
     'php-pear-Net-SMTP',
     'postfix >= 2.6.6',
+    'webconfig-php-imap',
 );
 
 $app['core_file_manifest'] = array(
@@ -69,4 +72,5 @@ $app['core_directory_manifest'] = array(
    '/etc/clearos/smtp.d' => array(),
    '/var/clearos/smtp' => array(),
    '/var/clearos/smtp/backup' => array(),
+   '/var/spool/filter' => array(),
 );

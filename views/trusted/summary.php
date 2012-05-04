@@ -55,13 +55,15 @@ $anchors = array(anchor_add('/app/smtp/trusted/add/'));
 ///////////////////////////////////////////////////////////////////////////////
 
 foreach ($networks as $network) {
+    // Skip localhost
+    if (preg_match('/^127\.0\.0\./', $network))
+        continue;
 
     $no_slash_network = preg_replace('/\//', '_', $network);
 
 	$item['title'] = $network;
 	$item['action'] = '/app/smtp/trusted/delete/' . $no_slash_network;
 	$item['anchors'] = button_set(array(
-        anchor_edit('/app/smtp/trusted/edit/' . $no_slash_network),
         anchor_delete('/app/smtp/trusted/delete/' . $no_slash_network)
     ));
 	$item['details'] = array($network);

@@ -112,7 +112,7 @@ class User_Policies extends ClearOS_Controller
                 $this->postfix->reset();
 
                 $this->page->set_status_updated();
-                redirect('/smtp/settings');
+                redirect('/smtp/user_policies');
             } catch (Engine_Exception $e) {
                 $this->page->view_exception($e->get_message());
                 return;

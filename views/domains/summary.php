@@ -1,12 +1,11 @@
-#!/usr/clearos/sandbox/usr/bin/php
 <?php
 
 /**
- * Mail pre-filtering engine.
+ * SMTP destination domains summary view.
  *
- * @category   Apps
+ * @category   ClearOS
  * @package    SMTP
- * @subpackage Scripts
+ * @subpackage Views
  * @author     ClearFoundation <developer@clearfoundation.com>
  * @copyright  2012 ClearFoundation
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License version 3 or later
@@ -26,30 +25,55 @@
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with this program.  If not, see <http://www.gnu.org/licenses/>.
-//
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.  
+//  
 ///////////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////////
-// B O O T S T R A P
+// Load dependencies
 ///////////////////////////////////////////////////////////////////////////////
 
-$bootstrap = getenv('CLEAROS_BOOTSTRAP') ? getenv('CLEAROS_BOOTSTRAP') : '/usr/clearos/framework/shared';
-require_once $bootstrap . '/bootstrap.php';
-
-set_include_path('/usr/share/pear');
+$this->lang->load('network');
+$this->lang->load('smtp');
 
 ///////////////////////////////////////////////////////////////////////////////
-// D E P E N D E N C I E S
+// Headers
 ///////////////////////////////////////////////////////////////////////////////
 
-use \clearos\apps\smtp\Filter_Incoming as Filter_Incoming;
-
-clearos_load_library('smtp/Filter_Incoming');
+$headers = array(
+	lang('network_domain')
+);
 
 ///////////////////////////////////////////////////////////////////////////////
-// M A I N
+// Anchors 
 ///////////////////////////////////////////////////////////////////////////////
 
-$parser = new Filter_Incoming();
-$parser->parse();
+$anchors = array(anchor_add('/app/smtp/domains/add/'));
+
+///////////////////////////////////////////////////////////////////////////////
+// Items
+///////////////////////////////////////////////////////////////////////////////
+
+foreach ($domains as $domain) {
+	$item['title'] = $domain;
+	$item['action'] = '/app/smtp/domains/delete/' . $domain;
+	$item['anchors'] = button_set(array(
+        anchor_delete('/app/smtp/domains/delete/' . $domain)
+    ));
+	$item['details'] = array($domain);
+
+	$items[] = $item;
+}
+
+sort($items);
+
+///////////////////////////////////////////////////////////////////////////////
+// Summary table
+///////////////////////////////////////////////////////////////////////////////
+
+echo summary_table(
+	lang('smtp_destination_domains'),
+	$anchors,
+	$headers,
+	$items
+);

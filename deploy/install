@@ -42,7 +42,7 @@ fi
 # Initialize domain name with default
 #------------------------------------
 
-/usr/clearos/app/smtp/deploy/initialize
+/usr/clearos/apps/smtp/deploy/initialize
 
 # Set default start/boot
 #-----------------------

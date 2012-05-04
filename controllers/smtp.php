@@ -66,13 +66,10 @@ class SMTP extends ClearOS_Controller
         if (clearos_app_installed('accounts')) {
             $this->load->module('accounts/status');
 
-            if ($this->status->unhappy()) {
+            if ($this->status->unhappy())
                 array_unshift($views, 'smtp/accounts_warning');
-            } else {
-                $views[] = 'smtp/user_policies';
-            }
-
-            // $views = array('smtp/settings', 'smtp/relay', 'smtp/trusted');
+            else
+                $views = array('smtp/settings', 'smtp/user_policies', 'smtp/domains', 'smtp/trusted');
         }
 
         $this->page->view_forms($views, lang('smtp_smtp_server'));

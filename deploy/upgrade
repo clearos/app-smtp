@@ -1,5 +1,16 @@
 #!/bin/sh
 
+# Sudoers
+#--------
+
+/usr/sbin/addsudo /usr/sbin/postconf app-smtp-core
+
+# Add filter user for doing mail filtering
+#-----------------------------------------
+
+getent group filter >/dev/null || groupadd -r filter
+getent passwd filter >/dev/null || useradd -r -g filter -d /var/spool/filter -s /sbin/nologin -c "Mail Filter" filter
+
 # PAM check
 #----------
 
@@ -9,11 +20,6 @@ if [ -z "$CHECK" ]; then
     [ -e /etc/pam.d/smtp.postfix ] && cp /etc/pam.d/smtp.postfix /var/clearos/smtp/backup/smtp.postfix.pam.$TIMESTAMP
     cp /usr/clearos/apps/smtp/deploy/smtp.pam /etc/pam.d/smtp.postfix
 fi
-
-# Update configlets with LDAP information
-#----------------------------------------
-
-/usr/sbin/ldap-synchronize
 
 # Grab bootstrap certificates from Certificate Manager
 #-----------------------------------------------------
@@ -37,3 +43,8 @@ if [ ! -s "$CRT" ]; then
     chown root.root $CRT
     chmod 600 $CRT
 fi
+
+# Update configlets with LDAP information
+#----------------------------------------
+
+/usr/sbin/ldap-synchronize

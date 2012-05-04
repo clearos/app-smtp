@@ -1,12 +1,11 @@
-#!/usr/clearos/sandbox/usr/bin/php
 <?php
 
 /**
- * Mail pre-filtering engine.
+ * SMTP destination domains item view.
  *
- * @category   Apps
+ * @category   ClearOS
  * @package    SMTP
- * @subpackage Scripts
+ * @subpackage Views
  * @author     ClearFoundation <developer@clearfoundation.com>
  * @copyright  2012 ClearFoundation
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License version 3 or later
@@ -26,30 +25,53 @@
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with this program.  If not, see <http://www.gnu.org/licenses/>.
-//
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.  
+//  
 ///////////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////////
-// B O O T S T R A P
+// Load dependencies
 ///////////////////////////////////////////////////////////////////////////////
 
-$bootstrap = getenv('CLEAROS_BOOTSTRAP') ? getenv('CLEAROS_BOOTSTRAP') : '/usr/clearos/framework/shared';
-require_once $bootstrap . '/bootstrap.php';
-
-set_include_path('/usr/share/pear');
+$this->lang->load('network');
+$this->lang->load('smtp');
 
 ///////////////////////////////////////////////////////////////////////////////
-// D E P E N D E N C I E S
+// Form handler
 ///////////////////////////////////////////////////////////////////////////////
 
-use \clearos\apps\smtp\Filter_Incoming as Filter_Incoming;
-
-clearos_load_library('smtp/Filter_Incoming');
+if ($form_type === 'edit') {
+	$form_path = '/smtp/domains/edit/' . $domain;
+	$buttons = array(
+		form_submit_update('submit'),
+		anchor_cancel('/app/smtp/domains/'),
+		anchor_delete('/app/smtp/domains/delete/' . $domain)
+	);
+} else {
+	$form_path = '/smtp/domains/add';
+	$buttons = array(
+		form_submit_add('submit'),
+		anchor_cancel('/app/smtp/domains/')
+	);
+}
 
 ///////////////////////////////////////////////////////////////////////////////
-// M A I N
+// Form open
 ///////////////////////////////////////////////////////////////////////////////
 
-$parser = new Filter_Incoming();
-$parser->parse();
+echo form_open($form_path);
+echo form_header(lang('smtp_destination_domains'));
+
+///////////////////////////////////////////////////////////////////////////////
+// Form fields and buttons
+///////////////////////////////////////////////////////////////////////////////
+
+echo field_input('domain', $domain, lang('network_domain'));
+echo field_button_set($buttons);
+
+///////////////////////////////////////////////////////////////////////////////
+// Form close
+///////////////////////////////////////////////////////////////////////////////
+
+echo form_footer();
+echo form_close();

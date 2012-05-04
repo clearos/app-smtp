@@ -1,7 +1,7 @@
 <?php
 
 /**
- * SMTP trusted networks controller.
+ * SMTP destination domain controller.
  *
  * @category   Apps
  * @package    SMTP
@@ -34,7 +34,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 /**
- * SMTP trusted networks controller.
+ * SMTP destination domain controller.
  *
  * @category   Apps
  * @package    SMTP
@@ -45,10 +45,10 @@
  * @link       http://www.clearfoundation.com/docs/developer/apps/smtp/
  */
 
-class Trusted extends ClearOS_Controller
+class Domains extends ClearOS_Controller
 {
 	/**
-	 * Trusted networks overview.
+	 * Destination domains overview.
 	 */
 
     function index($mode = 'edit')
@@ -64,7 +64,7 @@ class Trusted extends ClearOS_Controller
 
 		try {
             $data['mode'] = $mode;
-			$data['networks'] = $this->postfix->get_trusted_networks();
+			$data['domains'] = $this->postfix->get_destinations();
 		} catch (Exception $e) {
 			$this->page->view_exception($e);
 			return;
@@ -73,44 +73,44 @@ class Trusted extends ClearOS_Controller
 		// Load views
 		//-----------
 
-        $this->page->view_form('smtp/trusted/summary', $data, lang('smtp_trusted_networks'));
+        $this->page->view_form('smtp/domains/summary', $data, lang('smtp_destination_domains'));
 	}
 
 	/**
-	 * Add trusted network.
+	 * Add domain.
 	 */
 
-	function add($network)
+	function add()
 	{
-		$this->_item($network, 'add');
+		$this->_item('add');
 	}
 
 	/**
-	 * Delete trusted network.
+	 * Delete domain.
      *
-     * @param string $network network 
+     * @param string $domain domain 
      *
      * @return view
 	 */
 
-	function delete($network)
+	function delete($domain)
 	{
-        $confirm_uri = '/app/smtp/trusted/destroy/' . $network;
-        $cancel_uri = '/app/smtp/trusted';
-        $items = array(preg_replace('/_/', '/', $network));
+        $confirm_uri = '/app/smtp/domains/destroy/' . $domain;
+        $cancel_uri = '/app/smtp/domains';
+        $items = array($domain);
 
         $this->page->view_confirm_delete($confirm_uri, $cancel_uri, $items);
 	}
 
 	/**
-	 * Destroys trusted network.
+	 * Destroys domain.
      *
-     * @param string $network network 
+     * @param string $domain domain
      *
      * @return view
 	 */
 
-	function destroy($network)
+	function destroy($domain)
 	{
 		// Load libraries
 		//---------------
@@ -121,12 +121,11 @@ class Trusted extends ClearOS_Controller
 		//-------------------
 
 		try {
-            $network = preg_replace('/_/', '/', $network);
-			$this->postfix->delete_trusted_network($network);
+			$this->postfix->delete_destination($domain);
             $this->postfix->reset();
 
 			$this->page->set_status_deleted();
-            redirect('/smtp/trusted');
+            redirect('/smtp/domains');
 		} catch (Exception $e) {
 			$this->page->view_exception($e);
 			return;
@@ -134,16 +133,16 @@ class Trusted extends ClearOS_Controller
 	}
 
 	/**
-	 * Edit trusted network.
+	 * Edit domain.
      *
-     * @param string $network network 
+     * @param string $domain domain
      *
      * @return view
 	 */
 
-	function edit($network)
+	function edit($domain)
 	{
-		$this->_item($network, 'edit');
+		$this->_item('edit', $domain);
 	}
 
 	///////////////////////////////////////////////////////////////////////////////
@@ -151,25 +150,26 @@ class Trusted extends ClearOS_Controller
 	///////////////////////////////////////////////////////////////////////////////
 
 	/**
-	 * Trusted network common add/edit form handler.
+	 * Destination domain common add/edit form handler.
      *
-     * @param string $network network 
+     * @param string $form_type form type
+     * @param string $domain    domain 
      *
      * @return view
 	 */
 
-	function _item($network, $form_mode)
+	function _item($form_type, $domain = '')
 	{
 		// Load libraries
 		//---------------
 
-		$this->load->library('smtp/Postfix');
 		$this->lang->load('smtp');
+		$this->load->library('smtp/Postfix');
 
 		// Set validation rules
 		//---------------------
 
-        $this->form_validation->set_policy('network', 'smtp/Postfix', 'validate_trusted_network', TRUE);
+        $this->form_validation->set_policy('domain', 'smtp/Postfix', 'validate_destination_domain', TRUE);
 		$form_ok = $this->form_validation->run();
 
 		// Handle form submit
@@ -177,11 +177,11 @@ class Trusted extends ClearOS_Controller
 
 		if ($this->input->post('submit') && ($form_ok === TRUE)) {
 			try {
-				$this->postfix->add_trusted_network($this->input->post('network'));
+				$this->postfix->add_destination($this->input->post('domain'));
 				$this->postfix->reset();
 
 				$this->page->set_status_added();
-				redirect('/smtp/trusted');
+				redirect('/smtp/domains');
 			} catch (Exception $e) {
 				$this->page->view_exception($e);
 				return;
@@ -191,12 +191,11 @@ class Trusted extends ClearOS_Controller
 		// Load the view data 
 		//------------------- 
 
-		$data['mode'] = $form_mode;
-        $data['network'] = $network;
+		$data['form_type'] = $form_type;
  
 		// Load the views
 		//---------------
 
-        $this->page->view_form('smtp/trusted/item', lang('smtp_trusted_networks'), $data);
+        $this->page->view_form('smtp/domains/item', $data, lang('smtp_destination_domains'));
 	}
 }
