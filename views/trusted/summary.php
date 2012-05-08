@@ -59,6 +59,9 @@ foreach ($networks as $network) {
     if (preg_match('/^127\.0\.0\./', $network))
         continue;
 
+    if ($network === '[::1]/128')
+        continue;
+
     $no_slash_network = preg_replace('/\//', '_', $network);
 
 	$item['title'] = $network;
