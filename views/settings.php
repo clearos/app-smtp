@@ -71,7 +71,6 @@ echo form_header(lang('base_settings'));
 
 echo field_input('domain', $domain, lang('smtp_domain'), $read_only);
 echo field_input('hostname', $hostname, lang('smtp_hostname'), $read_only);
-echo field_input('relay_host', $relay_host, lang('smtp_relay_host'), $read_only);
 echo field_dropdown('max_message_size', $max_message_sizes, $max_message_size, lang('smtp_maximum_message_size'), $read_only);
 
 echo field_button_set($buttons);

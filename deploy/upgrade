@@ -43,8 +43,3 @@ if [ ! -s "$CRT" ]; then
     chown root.root $CRT
     chmod 600 $CRT
 fi
-
-# Update configlets with LDAP information
-#----------------------------------------
-
-/usr/sbin/ldap-synchronize

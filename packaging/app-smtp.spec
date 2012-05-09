@@ -1,7 +1,7 @@
 
 Name: app-smtp
 Epoch: 1
-Version: 1.1.1
+Version: 1.1.3
 Release: 1%{dist}
 Summary: SMTP Server
 License: GPLv3
@@ -10,7 +10,10 @@ Source: %{name}-%{version}.tar.gz
 Buildarch: noarch
 Requires: %{name}-core = 1:%{version}-%{release}
 Requires: app-base
+Requires: app-mail-settings
 Requires: app-network
+Requires: app-smtp-plugin-core
+Requires: cyrus-sasl-plain
 
 %description
 SMTP Server description...
@@ -22,13 +25,9 @@ Group: ClearOS/Libraries
 Requires: app-base-core
 Requires: app-certificate-manager-core
 Requires: app-network-core >= 1:1.1.1
-Requires: app-smtp-plugin-core
-Requires: cyrus-sasl-plain
+Requires: app-mail-core
 Requires: mailx >= 12.4
-Requires: php-pear-Net-LMTP
-Requires: php-pear-Net-SMTP
 Requires: postfix >= 2.6.6
-Requires: webconfig-php-imap
 
 %description core
 SMTP Server description...
@@ -46,10 +45,7 @@ cp -r * %{buildroot}/usr/clearos/apps/smtp/
 install -d -m 0755 %{buildroot}/etc/clearos/smtp.d
 install -d -m 0755 %{buildroot}/var/clearos/smtp
 install -d -m 0755 %{buildroot}/var/clearos/smtp/backup
-install -d -m 0755 %{buildroot}/var/spool/filter
 install -D -m 0644 packaging/authorize %{buildroot}/etc/clearos/smtp.d/authorize
-install -D -m 0755 packaging/mailpostfilter %{buildroot}/usr/sbin/mailpostfilter
-install -D -m 0755 packaging/mailprefilter %{buildroot}/usr/sbin/mailprefilter
 install -D -m 0644 packaging/postfix.php %{buildroot}/var/clearos/base/daemon/postfix.php
 
 %post
@@ -93,11 +89,8 @@ exit 0
 %dir /etc/clearos/smtp.d
 %dir /var/clearos/smtp
 %dir /var/clearos/smtp/backup
-%dir /var/spool/filter
 /usr/clearos/apps/smtp/deploy
 /usr/clearos/apps/smtp/language
 /usr/clearos/apps/smtp/libraries
 /etc/clearos/smtp.d/authorize
-/usr/sbin/mailpostfilter
-/usr/sbin/mailprefilter
 /var/clearos/base/daemon/postfix.php
