@@ -60,7 +60,7 @@ clearos_load_library('smtp/Postfix');
 $domain = new Domain();
 $default = $domain->get_default();
 
-if (! empty($domain)) {
+if (! empty($default)) {
     $postfix = new Postfix();
     $postfix->set_domain($default);
 }

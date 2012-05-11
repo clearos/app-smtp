@@ -1162,7 +1162,7 @@ class Postfix extends Daemon
     {
         clearos_profile(__METHOD__, __LINE__);
 
-        $this->_SetMailRestriction(
+        $this->_set_mail_restriction(
             "smtpd_recipient_restrictions", 
             "check_policy_service",
             $service,
