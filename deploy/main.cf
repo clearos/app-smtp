@@ -663,8 +663,8 @@ manpage_directory = /usr/share/man
 
 # General settings
 bounce_queue_lifetime = 6h
-mailbox_size_limit = 51200000
-message_size_limit = 10240000
+mailbox_size_limit = 102400000
+message_size_limit = 51200000
 luser_relay =
 recipient_delimiter = +
 message_strip_characters = \0
