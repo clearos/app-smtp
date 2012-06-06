@@ -1,7 +1,7 @@
 <?php
 
 /**
- * SMTP controller.
+ * Postfix daemon controller.
  *
  * @category   Apps
  * @package    SMTP
@@ -30,11 +30,24 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////////
+// B O O T S T R A P
+///////////////////////////////////////////////////////////////////////////////
+
+$bootstrap = getenv('CLEAROS_BOOTSTRAP') ? getenv('CLEAROS_BOOTSTRAP') : '/usr/clearos/framework/shared';
+require_once $bootstrap . '/bootstrap.php';
+
+///////////////////////////////////////////////////////////////////////////////
+// D E P E N D E N C I E S
+///////////////////////////////////////////////////////////////////////////////
+
+require clearos_app_base('base') . '/controllers/daemon.php';
+
+///////////////////////////////////////////////////////////////////////////////
 // C L A S S
 ///////////////////////////////////////////////////////////////////////////////
 
 /**
- * SMTP controller.
+ * Postfix daemon controller.
  *
  * @category   Apps
  * @package    SMTP
@@ -45,33 +58,14 @@
  * @link       http://www.clearfoundation.com/docs/developer/apps/smtp/
  */
 
-class SMTP extends ClearOS_Controller
+class Server extends Daemon
 {
-	/**
-	 * SMTP server overview.
-	 */
+    /**
+     * Postfix daemon constructor.
+     */
 
-	function index()
-	{
-		// Load libraries
-		//---------------
-
-		$this->lang->load('smtp');
-
-		// Load views
-		//-----------
-
-        $views = array('smtp/server', 'smtp/settings', 'smtp/trusted');
-
-        if (clearos_app_installed('accounts')) {
-            $this->load->module('accounts/status');
-
-            if ($this->status->unhappy())
-                array_unshift($views, 'smtp/accounts_warning');
-            else
-                $views = array('smtp/server', 'smtp/settings', 'smtp/user_policies', 'smtp/domains', 'smtp/trusted');
-        }
-
-        $this->page->view_forms($views, lang('smtp_smtp_server'));
-	}
+    function __construct()
+    {
+        parent::__construct('postfix', 'smtp');
+    }
 }
