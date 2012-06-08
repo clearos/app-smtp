@@ -43,3 +43,9 @@ if [ ! -s "$CRT" ]; then
     chown root.root $CRT
     chmod 600 $CRT
 fi
+
+
+# FIXME: beta only
+chkconfig saslauthd on >/dev/null 2>&1
+service saslauthd start >/dev/null 2>&1
+

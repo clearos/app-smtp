@@ -57,3 +57,8 @@ else
     service postfix condrestart
 fi
 
+logger -p local6.notice -t installer "app-smtp-core - enabling saslauth server"
+chkconfig saslauthd on
+
+logger -p local6.notice -t installer "app-smtp-core - starting saslauthd server"
+service saslauthd start

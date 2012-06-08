@@ -5,7 +5,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 $app['basename'] = 'smtp';
-$app['version'] = '1.1.6';
+$app['version'] = '1.1.7';
 $app['release'] = '1';
 $app['vendor'] = 'ClearFoundation';
 $app['packager'] = 'ClearFoundation';
@@ -39,6 +39,7 @@ $app['core_requires'] = array(
     'app-certificate-manager-core',
     'app-network-core >= 1:1.1.1',
     'app-mail-core',
+    'cyrus-sasl',
     'mailx >= 12.4',
     'postfix >= 2.6.6',
 );
