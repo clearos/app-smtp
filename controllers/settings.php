@@ -101,6 +101,7 @@ class Settings extends ClearOS_Controller
          
         $this->form_validation->set_policy('domain', 'smtp/Postfix', 'validate_domain', TRUE);
         $this->form_validation->set_policy('hostname', 'smtp/Postfix', 'validate_hostname', TRUE);
+        $this->form_validation->set_policy('relay_host', 'smtp/Postfix', 'validate_relay_host');
         $this->form_validation->set_policy('max_message_size', 'smtp/Postfix', 'validate_max_message_size', TRUE);
 
         $form_ok = $this->form_validation->run();
@@ -112,6 +113,7 @@ class Settings extends ClearOS_Controller
             try {
                 $this->postfix->set_domain($this->input->post('domain'));
                 $this->postfix->set_hostname($this->input->post('hostname'));
+                $this->postfix->set_relay_host($this->input->post('relay_host'));
                 $this->postfix->set_max_message_size($this->input->post('max_message_size'));
 
                 $this->postfix->reset();
@@ -132,6 +134,7 @@ class Settings extends ClearOS_Controller
             $data['domain'] = $this->postfix->get_domain();
             $data['hostname'] = $this->postfix->get_hostname();
             $data['max_message_size'] = $this->postfix->get_max_message_size();
+            $data['relay_host'] = $this->postfix->get_relay_host();
         } catch (Exception $e) {
             $this->page->view_exception($e);
             return;
