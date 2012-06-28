@@ -1,6 +1,6 @@
 <?php
 
-$lang['smtp_app_description'] = 'SMTP Server description...'; // FIXME
+$lang['smtp_app_description'] = 'The SMTP Server provides an incoming and outgoing mail server as well as mail forwarding and SMTP authentication features.';
 $lang['smtp_app_name'] = 'SMTP Server';
 $lang['smtp_destination_domains'] = 'Destination Domains';
 $lang['smtp_forward_domains'] = 'Forward Domains';
@@ -31,3 +31,4 @@ $lang['smtp_accounts_system_not_initialized_warning'] = 'In order to enable all 
 $lang['smtp_configure_accounts'] = 'Configure Accounts';
 $lang['smtp_relay_host'] = 'Relay Host';
 $lang['smtp_relay_host_invalid'] = 'Relay host is invalid.';
+$lang['smtp_target_server'] = 'Target Server';

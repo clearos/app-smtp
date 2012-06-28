@@ -182,6 +182,8 @@ class Postfix extends Daemon
         $info['server'] = $server;
         $info['port'] = $port;
 
+        $forwarders = $this->get_forwarders();
+
         $forwarders[] = $info;
 
         $this->_set_forwarders($forwarders);
@@ -281,24 +283,22 @@ class Postfix extends Daemon
     {
         clearos_profile(__METHOD__, __LINE__);
 
-        $forwarders = array();
-
         $forwarders = $this->get_forwarders();
 
         // Check for existing record
         if (count($forwarders) == 0)
             return;
 
-        $newforwarders = array();
+        $new_forwarders = array();
 
         foreach ($forwarders as $forwardinfo) {
             if ($forwardinfo['domain'] == $domain)
                 continue;
 
-            $newforwarders[] = $forwardinfo;
+            $new_forwarders[] = $forwardinfo;
         }
 
-        $this->_set_forwarders($newforwarders);
+        $this->_set_forwarders($new_forwarders);
 
         $this->_delete_list_item('relay_domains', ',', $domain);
     }
@@ -1637,8 +1637,10 @@ class Postfix extends Daemon
         // Managed transport file
         $file = new File(self::FILE_TRANSPORT);
 
-        if (! $file->exists())
-            $file->create('root', 'root', '0644');
+        if ($file->exists())
+            $file->delete();
+
+        $file->create('root', 'root', '0644');
 
         $transport_data = '';
 

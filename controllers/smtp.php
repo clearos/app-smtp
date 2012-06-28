@@ -61,7 +61,7 @@ class SMTP extends ClearOS_Controller
 		// Load views
 		//-----------
 
-        $views = array('smtp/server', 'smtp/settings', 'smtp/trusted');
+        $views = array('smtp/server', 'smtp/settings', 'smtp/trusted', 'smtp/forwarding');
 
         if (clearos_app_installed('accounts')) {
             $this->load->module('accounts/status');
@@ -69,7 +69,7 @@ class SMTP extends ClearOS_Controller
             if ($this->status->unhappy())
                 array_unshift($views, 'smtp/accounts_warning');
             else
-                $views = array('smtp/server', 'smtp/settings', 'smtp/user_policies', 'smtp/domains', 'smtp/trusted');
+                $views = array('smtp/server', 'smtp/settings', 'smtp/user_policies', 'smtp/domains', 'smtp/trusted', 'smtp/forwarding');
         }
 
         $this->page->view_forms($views, lang('smtp_smtp_server'));

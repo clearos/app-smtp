@@ -5,7 +5,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 $app['basename'] = 'smtp';
-$app['version'] = '1.2.2';
+$app['version'] = '1.2.3';
 $app['release'] = '1';
 $app['vendor'] = 'ClearFoundation';
 $app['packager'] = 'ClearFoundation';
@@ -29,6 +29,7 @@ $app['controllers']['smtp']['title'] = lang('smtp_app_name');
 $app['controllers']['settings']['title'] = lang('base_settings');
 $app['controllers']['trusted']['title'] = lang('smtp_trusted_networks');
 $app['controllers']['domains']['title'] = lang('smtp_destination_domains');
+$app['controllers']['forwarding']['title'] = lang('smtp_mail_forwarding');
 $app['controllers']['user_policies']['title'] = lang('smtp_user_policies');
 
 /////////////////////////////////////////////////////////////////////////////

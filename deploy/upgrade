@@ -4,6 +4,7 @@
 #--------
 
 /usr/sbin/addsudo /usr/sbin/postconf app-smtp-core
+/usr/sbin/addsudo /usr/sbin/postmap app-smtp-core
 
 # Add filter user for doing mail filtering
 #-----------------------------------------
