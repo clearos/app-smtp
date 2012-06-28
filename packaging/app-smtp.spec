@@ -1,7 +1,7 @@
 
 Name: app-smtp
 Epoch: 1
-Version: 1.2.2
+Version: 1.2.3
 Release: 1%{dist}
 Summary: SMTP Server
 License: GPLv3
@@ -16,7 +16,7 @@ Requires: app-smtp-plugin-core
 Requires: cyrus-sasl-plain
 
 %description
-SMTP Server description...
+The SMTP Server provides an incoming and outgoing mail server as well as mail forwarding and SMTP authentication features.
 
 %package core
 Summary: SMTP Server - Core
@@ -31,7 +31,7 @@ Requires: mailx >= 12.4
 Requires: postfix >= 2.6.6
 
 %description core
-SMTP Server description...
+The SMTP Server provides an incoming and outgoing mail server as well as mail forwarding and SMTP authentication features.
 
 This package provides the core API and libraries.
 
