@@ -105,6 +105,7 @@ class Postfix extends Daemon
     const FILE_TRANSPORT = '/etc/postfix/transport';
     const FILE_SENDER_BCC = '/etc/postfix/sender_bcc_maps';
     const FILE_RECIPIENT_BCC = '/etc/postfix/recipient_bcc_maps';
+    const FILE_SEARCH_DOMAINS = '/etc/postfix/searchdomains';
     const COMMAND_POSTCONF = '/usr/sbin/postconf';
     const COMMAND_POSTFIX = '/usr/sbin/postfix';
     const COMMAND_POSTMAP = '/usr/sbin/postmap';
@@ -157,6 +158,9 @@ class Postfix extends Daemon
         Validation_Exception::is_valid($this->validate_destination_domain($domain));
 
         $this->_add_list_item('mydestination', ',', $domain);
+
+        // Update the list of local delivery domains
+        $this->update_search_domains();
     }
 
     /**
@@ -188,6 +192,9 @@ class Postfix extends Daemon
 
         $this->_set_forwarders($forwarders);
         $this->_add_list_item('relay_domains', ',', $domain);
+
+        // Update the list of local delivery domains
+        $this->update_search_domains();
     }
 
     /**
@@ -268,6 +275,9 @@ class Postfix extends Daemon
         Validation_Exception::is_valid($this->validate_destination_domain($domain, FALSE));
 
         $this->_delete_list_item('mydestination', ',', $domain);
+
+        // Update the list of local delivery domains
+        $this->update_search_domains();
     }
 
     /**
@@ -301,6 +311,9 @@ class Postfix extends Daemon
         $this->_set_forwarders($new_forwarders);
 
         $this->_delete_list_item('relay_domains', ',', $domain);
+
+        // Update the list of local delivery domains
+        $this->update_search_domains();
     }
 
     /**
@@ -947,6 +960,9 @@ class Postfix extends Daemon
         Validation_Exception::is_valid($this->validate_domain($domain));
 
         $this->_set_parameter('mydomain', $domain);    
+
+        // Update the list of local delivery domains
+        $this->update_search_domains();
     }
 
     /**
@@ -1226,6 +1242,33 @@ class Postfix extends Daemon
         } catch (Exception $e) {
             throw new Engine_Exception($e->GetMessage(), COMMON_ERROR);
         }
+    }
+
+    /**
+     * Writes out the searchdomains file.
+     *
+     * @access private
+     * @return void
+     * @throws Engine_Exception
+     */
+
+    public function update_search_domains()
+    {
+        clearos_profile(__METHOD__, __LINE__);
+
+        $file = new File(self::FILE_SEARCH_DOMAINS);
+
+        $domains = $this->get_local_domains();
+        $output = implode("\n", $domains);
+
+        if ($file->exists())
+            $file->delete();
+
+        $file->create('root', 'root', '0644');
+        $file->add_lines("$output\n");
+
+        $shell = new Shell();
+        $shell->execute(self::COMMAND_POSTMAP, self::FILE_SEARCH_DOMAINS, TRUE);
     }
 
     ///////////////////////////////////////////////////////////////////////////////

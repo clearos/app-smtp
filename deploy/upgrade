@@ -45,6 +45,10 @@ if [ ! -s "$CRT" ]; then
     chmod 600 $CRT
 fi
 
+# Update search domains
+#----------------------
+
+/usr/clearos/apps/smtp/deploy/update-search-domains
 
 # FIXME: beta only
 chkconfig saslauthd on >/dev/null 2>&1
