@@ -5,7 +5,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 $app['basename'] = 'smtp';
-$app['version'] = '1.2.4';
+$app['version'] = '1.2.5';
 $app['release'] = '1';
 $app['vendor'] = 'ClearFoundation';
 $app['packager'] = 'ClearFoundation';
@@ -41,6 +41,7 @@ $app['core_requires'] = array(
     'app-network-core >= 1:1.1.1',
     'app-mail-core',
     'cyrus-sasl',
+    'cyrus-sasl-plain',
     'mailx >= 12.4',
     'postfix >= 2.6.6',
 );
@@ -49,7 +50,6 @@ $app['requires'] = array(
     'app-mail-settings',
     'app-network',
     'app-smtp-plugin-core',
-    'cyrus-sasl-plain',
 );
 
 $app['core_file_manifest'] = array(

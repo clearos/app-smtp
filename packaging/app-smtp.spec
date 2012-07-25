@@ -1,7 +1,7 @@
 
 Name: app-smtp
 Epoch: 1
-Version: 1.2.4
+Version: 1.2.5
 Release: 1%{dist}
 Summary: SMTP Server
 License: GPLv3
@@ -13,7 +13,6 @@ Requires: app-base
 Requires: app-mail-settings
 Requires: app-network
 Requires: app-smtp-plugin-core
-Requires: cyrus-sasl-plain
 
 %description
 The SMTP Server provides an incoming and outgoing mail server as well as mail forwarding and SMTP authentication features.
@@ -27,6 +26,7 @@ Requires: app-certificate-manager-core
 Requires: app-network-core >= 1:1.1.1
 Requires: app-mail-core
 Requires: cyrus-sasl
+Requires: cyrus-sasl-plain
 Requires: mailx >= 12.4
 Requires: postfix >= 2.6.6
 
