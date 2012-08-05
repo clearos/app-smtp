@@ -1259,7 +1259,8 @@ class Postfix extends Daemon
         $file = new File(self::FILE_SEARCH_DOMAINS);
 
         $domains = $this->get_local_domains();
-        $output = implode("\n", $domains);
+        $output = implode(" yes\n", $domains);
+        $output .= " yes";
 
         if ($file->exists())
             $file->delete();
