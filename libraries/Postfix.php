@@ -1367,7 +1367,8 @@ class Postfix extends Daemon
     {
         clearos_profile(__METHOD__, __LINE__);
 
-        if (! Network_Utils::is_valid_hostname($hostname))
+        // IP addresses are forbidden
+        if (Network_Utils::is_valid_ip($hostname) || (!Network_Utils::is_valid_hostname($hostname)))
             return lang('network_hostname_invalid');
     }
 

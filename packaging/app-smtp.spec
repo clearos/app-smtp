@@ -1,7 +1,7 @@
 
 Name: app-smtp
 Epoch: 1
-Version: 1.2.6
+Version: 1.2.7
 Release: 1%{dist}
 Summary: SMTP Server
 License: GPLv3

@@ -111,8 +111,8 @@ class Settings extends ClearOS_Controller
 
         if (($this->input->post('submit') && $form_ok)) {
             try {
-                $this->postfix->set_domain($this->input->post('domain'));
                 $this->postfix->set_hostname($this->input->post('hostname'));
+                $this->postfix->set_domain($this->input->post('domain'));
                 $this->postfix->set_relay_host($this->input->post('relay_host'));
                 $this->postfix->set_max_message_size($this->input->post('max_message_size'));
 
