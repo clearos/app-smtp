@@ -471,6 +471,24 @@ class Postfix extends Daemon
     }
 
     /**
+     * Returns delivery domains.
+     *
+     * Delivery domains include:
+     * - primary domain (mydomain)
+     * - destination domains (mydestination)
+     *
+     * @return array list of local domains
+     * @throws Engine_Exception
+     */
+
+    public function get_delivery_domains()
+    {
+        clearos_profile(__METHOD__, __LINE__);
+
+        return $this->_get_domains(TRUE, TRUE, FALSE);
+    }
+
+    /**
      * Returns destinations.
      *
      * With the scrub flag set, localhost and any domain that uses a variable
@@ -589,21 +607,7 @@ class Postfix extends Daemon
     {
         clearos_profile(__METHOD__, __LINE__);
 
-        $domains = array();
-
-        // Primary domain
-        $domains[] = $this->get_domain();
-
-        // Destination domains
-        $domains = array_merge($this->get_destinations(TRUE), $domains);
-
-        // Forwarder domains
-        $forwarders = $this->get_forwarders();
-
-        foreach ($forwarders as $id => $details)
-            $domains[] = $details['domain'];
-
-        return $domains;
+        return $this->_get_domains(TRUE, TRUE, TRUE);
     }
 
     /**
@@ -1258,7 +1262,7 @@ class Postfix extends Daemon
 
         $file = new File(self::FILE_SEARCH_DOMAINS);
 
-        $domains = $this->get_local_domains();
+        $domains = $this->get_delivery_domains();
         $output = implode(" yes\n", $domains);
         $output .= " yes";
 
@@ -1573,6 +1577,42 @@ class Postfix extends Daemon
         $shell->execute(self::COMMAND_POSTCONF, "-e '$key=$thelist'", TRUE);
 
         $this->is_loaded = FALSE;
+    }
+
+    /**
+     * Returns domains based on specified requirements.
+     *
+     * @param boolean $primary      primary domain
+     * @param boolean $destinations destination domains
+     * @param boolean $forwarders   forwarder domains
+     *
+     * @return array list of domains
+     * @throws Engine_Exception
+     */
+
+    public function _get_domains($primary, $destinations, $forwarders)
+    {
+        clearos_profile(__METHOD__, __LINE__);
+
+        $domains = array();
+
+        // Primary domain
+        if ($primary)
+            $domains[] = $this->get_domain();
+
+        // Destination domains
+        if ($destinations)
+            $domains = array_merge($this->get_destinations(TRUE), $domains);
+
+        // Forwarder domains
+        if ($forwarders) {
+            $forwarder_domains = $this->get_forwarders();
+
+            foreach ($forwarder_domains as $id => $details)
+                $domains[] = $details['domain'];
+        }
+
+        return $domains;
     }
 
     /**
