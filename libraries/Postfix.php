@@ -1263,6 +1263,8 @@ class Postfix extends Daemon
         $file = new File(self::FILE_SEARCH_DOMAINS);
 
         $domains = $this->get_delivery_domains();
+        $domains[] = 'localhost'; // Add explicit localhost entry (fetchmail friendly)
+
         $output = implode(" yes\n", $domains);
         $output .= " yes";
 
