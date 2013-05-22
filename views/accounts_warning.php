@@ -3,9 +3,9 @@
 /**
  * Accounts system warning view.
  *
- * @category   ClearOS
- * @package    SMTP
- * @subpackage Views
+ * @category   apps
+ * @package    smtp
+ * @subpackage views
  * @author     ClearFoundation <developer@clearfoundation.com>
  * @copyright  2012 ClearFoundation
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License version 3 or later

@@ -3,9 +3,9 @@
 /**
  * SMTP controller.
  *
- * @category   Apps
- * @package    SMTP
- * @subpackage Controllers
+ * @category   apps
+ * @package    smtp
+ * @subpackage controllers
  * @author     ClearFoundation <developer@clearfoundation.com>
  * @copyright  2011 ClearFoundation
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License version 3 or later
@@ -36,9 +36,9 @@
 /**
  * SMTP controller.
  *
- * @category   Apps
- * @package    SMTP
- * @subpackage Controllers
+ * @category   apps
+ * @package    smtp
+ * @subpackage controllers
  * @author     ClearFoundation <developer@clearfoundation.com>
  * @copyright  2011 ClearFoundation
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License version 3 or later
