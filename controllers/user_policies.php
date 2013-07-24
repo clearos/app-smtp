@@ -3,9 +3,9 @@
 /**
  * User policies controller.
  *
- * @category   apps
- * @package    smtp
- * @subpackage controllers
+ * @category   Apps
+ * @package    SMTP
+ * @subpackage Controllers
  * @author     ClearFoundation <developer@clearfoundation.com>
  * @copyright  2012 ClearFoundation
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License version 3 or later
@@ -36,9 +36,9 @@
 /**
  * User policies controller.
  *
- * @category   apps
- * @package    smtp
- * @subpackage controllers
+ * @category   Apps
+ * @package    SMTP
+ * @subpackage Controllers
  * @author     ClearFoundation <developer@clearfoundation.com>
  * @copyright  2012 ClearFoundation
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License version 3 or later
@@ -100,6 +100,7 @@ class User_Policies extends ClearOS_Controller
         //---------------------
          
         $this->form_validation->set_policy('smtp_authentication', 'smtp/Postfix', 'validate_smtp_authentication_state', TRUE);
+        $this->form_validation->set_policy('smtp_block_plaintext', 'smtp/Postfix', 'validate_smtp_block_plaintext', TRUE);
         $form_ok = $this->form_validation->run();
 
         // Handle form submit
@@ -108,6 +109,7 @@ class User_Policies extends ClearOS_Controller
         if (($this->input->post('submit') && $form_ok)) {
             try {
                 $this->postfix->set_smtp_authentication_state($this->input->post('smtp_authentication'));
+                $this->postfix->set_smtp_block_plaintext($this->input->post('smtp_block_plaintext'));
 
                 $this->postfix->reset();
 
@@ -127,6 +129,7 @@ class User_Policies extends ClearOS_Controller
             $data['catch_all'] = $this->postfix->get_catch_all();
             $data['catch_alls'] = $this->postfix->get_catch_all_users();
             $data['smtp_authentication'] = $this->postfix->get_smtp_authentication_state();
+            $data['smtp_block_plaintext'] = $this->postfix->get_smtp_block_plaintext();
         } catch (Exception $e) {
             $this->page->view_exception($e);
             return;

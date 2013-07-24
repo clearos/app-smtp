@@ -3,9 +3,9 @@
 /**
  * Postfix class
  *
- * @category   apps
- * @package    smtp
- * @subpackage libraries
+ * @category   Apps
+ * @package    SMTP
+ * @subpackage Libraries
  * @author     ClearFoundation <developer@clearfoundation.com>
  * @copyright  2003-2011 ClearFoundation
  * @license    http://www.gnu.org/copyleft/lgpl.html GNU Lesser General Public License version 3 or later
@@ -85,9 +85,9 @@ clearos_load_library('base/Validation_Exception');
 /**
  * Postfix class
  *
- * @category   apps
- * @package    smtp
- * @subpackage libraries
+ * @category   Apps
+ * @package    SMTP
+ * @subpackage Libraries
  * @author     ClearFoundation <developer@clearfoundation.com>
  * @copyright  2003-2011 ClearFoundation
  * @license    http://www.gnu.org/copyleft/lgpl.html GNU Lesser General Public License version 3 or later
@@ -864,6 +864,28 @@ class Postfix extends Daemon
     }
 
     /**
+     * Get SMTP authentication security option.
+     *
+     * @return boolean TRUE if plain-text authentication is dis-allowed
+     * @throws Engine_Exception
+     */
+
+    public function get_smtp_block_plaintext()
+    {
+        clearos_profile(__METHOD__, __LINE__);
+
+        if (! $this->is_loaded)
+            $this->_load_config();
+
+        $block = $this->config['smtpd_tls_auth_only'];
+
+        if (preg_match("/yes/i", $block))
+            return TRUE;
+        else
+            return FALSE;
+    }
+
+    /**
      * Returns SMTP port.
      *
      * @return integer SMTP port
@@ -1218,6 +1240,38 @@ class Postfix extends Daemon
     }
 
     /**
+     * Set option to prevent plain-text authentication with the SMTP server.
+     *
+     * @param boolean $block block plain-text authentications
+     *
+     * @return void
+     * @throws Engine_Exception
+     */
+
+    public function set_smtp_block_plaintext($block)
+    {
+        clearos_profile(__METHOD__, __LINE__);
+
+        // Validate
+        //---------
+
+        Validation_Exception::is_valid($this->validate_smtp_block_plaintext($block));
+
+        // Set parameter
+        //--------------
+
+        if ($block)
+            $block = "yes";
+        else
+            $block = "no";
+
+        // Set parameter
+        //--------------
+
+        $this->_set_parameter('smtpd_tls_auth_only', $block);
+    }
+
+    /**
      * Sets SMTP port to bind to/listen on.
      *
      * @param integer $port port to bind to
@@ -1458,6 +1512,22 @@ class Postfix extends Daemon
 
         if (! clearos_is_valid_boolean($state))
             return lang('smtp_smtp_authentication_state_invalid');
+    }
+
+    /**
+     * Validation routine for SMTP block plain-text authentication.
+     *
+     * @param boolean $block option
+     *
+     * @return string error message if SMTP block plain-text is invalid
+     */
+
+    public function validate_smtp_block_plaintext($block)
+    {
+        clearos_profile(__METHOD__, __LINE__);
+
+        if (! clearos_is_valid_boolean($block))
+            return lang('smtp_smtp_block_plaintext__invalid');
     }
 
     /**

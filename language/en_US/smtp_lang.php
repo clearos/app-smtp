@@ -2,6 +2,7 @@
 
 $lang['smtp_app_description'] = 'The SMTP Server provides an incoming and outgoing mail server as well as mail forwarding and SMTP authentication features.';
 $lang['smtp_app_name'] = 'SMTP Server';
+$lang['smtp_block_plaintext'] = 'Block Plain-Text Passwords';
 $lang['smtp_destination_domains'] = 'Destination Domains';
 $lang['smtp_forward_domains'] = 'Forward Domains';
 $lang['smtp_domain'] = 'Domain';

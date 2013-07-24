@@ -3,9 +3,9 @@
 /**
  * SMTP general settings view.
  *
- * @category   apps
- * @package    smtp
- * @subpackage views
+ * @category   ClearOS
+ * @package    SMTP
+ * @subpackage Views
  * @author     ClearFoundation <developer@clearfoundation.com>
  * @copyright  2011 ClearFoundation
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License version 3 or later
@@ -59,6 +59,7 @@ echo form_open('/smtp/user_policies/edit');
 echo form_header(lang('smtp_user_policies'));
 
 echo field_toggle_enable_disable('smtp_authentication', $smtp_authentication, lang('smtp_smtp_authentication'), $read_only);
+echo field_toggle_enable_disable('smtp_block_plaintext', $smtp_block_plaintext, lang('smtp_block_plaintext'), $read_only);
 
 /* TODO... maybe
 if (empty($catch_alls))
