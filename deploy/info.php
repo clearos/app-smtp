@@ -5,7 +5,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 $app['basename'] = 'smtp';
-$app['version'] = '1.5.0';
+$app['version'] = '1.5.40';
 $app['release'] = '1';
 $app['vendor'] = 'ClearFoundation';
 $app['packager'] = 'ClearFoundation';
@@ -38,10 +38,12 @@ $app['controllers']['user_policies']['title'] = lang('smtp_user_policies');
 
 $app['core_requires'] = array(
     'app-certificate-manager-core',
+    'app-events-core',
     'app-network-core >= 1:1.1.1',
     'app-mail-core',
     'cyrus-sasl',
     'cyrus-sasl-plain',
+    'csplugin-filewatch',
     'mailx >= 12.4',
     'postfix >= 2.6.6',
 );
@@ -53,6 +55,7 @@ $app['requires'] = array(
 );
 
 $app['core_file_manifest'] = array(
+    'filewatch-smtp-event.conf'=> array('target' => '/etc/clearsync.d/filewatch-smtp-event.conf'),
     'postfix.php'=> array('target' => '/var/clearos/base/daemon/postfix.php'),
     'authorize'=> array('target' => '/etc/clearos/smtp.d/authorize'),
 );
@@ -61,4 +64,5 @@ $app['core_directory_manifest'] = array(
     '/etc/clearos/smtp.d' => array(),
     '/var/clearos/smtp' => array(),
     '/var/clearos/smtp/backup' => array(),
+    '/var/clearos/events/smtp' => array(),
 );

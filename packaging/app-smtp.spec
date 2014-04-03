@@ -1,7 +1,7 @@
 
 Name: app-smtp
 Epoch: 1
-Version: 1.5.0
+Version: 1.5.40
 Release: 1%{dist}
 Summary: SMTP Server
 License: GPLv3
@@ -23,10 +23,12 @@ License: LGPLv3
 Group: ClearOS/Libraries
 Requires: app-base-core
 Requires: app-certificate-manager-core
+Requires: app-events-core
 Requires: app-network-core >= 1:1.1.1
 Requires: app-mail-core
 Requires: cyrus-sasl
 Requires: cyrus-sasl-plain
+Requires: csplugin-filewatch
 Requires: mailx >= 12.4
 Requires: postfix >= 2.6.6
 
@@ -44,9 +46,11 @@ mkdir -p -m 755 %{buildroot}/usr/clearos/apps/smtp
 cp -r * %{buildroot}/usr/clearos/apps/smtp/
 
 install -d -m 0755 %{buildroot}/etc/clearos/smtp.d
+install -d -m 0755 %{buildroot}/var/clearos/events/smtp
 install -d -m 0755 %{buildroot}/var/clearos/smtp
 install -d -m 0755 %{buildroot}/var/clearos/smtp/backup
 install -D -m 0644 packaging/authorize %{buildroot}/etc/clearos/smtp.d/authorize
+install -D -m 0644 packaging/filewatch-smtp-event.conf %{buildroot}/etc/clearsync.d/filewatch-smtp-event.conf
 install -D -m 0644 packaging/postfix.php %{buildroot}/var/clearos/base/daemon/postfix.php
 
 %post
@@ -85,13 +89,14 @@ exit 0
 %files core
 %defattr(-,root,root)
 %exclude /usr/clearos/apps/smtp/packaging
-%exclude /usr/clearos/apps/smtp/tests
 %dir /usr/clearos/apps/smtp
 %dir /etc/clearos/smtp.d
+%dir /var/clearos/events/smtp
 %dir /var/clearos/smtp
 %dir /var/clearos/smtp/backup
 /usr/clearos/apps/smtp/deploy
 /usr/clearos/apps/smtp/language
 /usr/clearos/apps/smtp/libraries
 /etc/clearos/smtp.d/authorize
+/etc/clearsync.d/filewatch-smtp-event.conf
 /var/clearos/base/daemon/postfix.php
