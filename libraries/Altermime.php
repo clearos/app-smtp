@@ -239,6 +239,6 @@ class Altermime extends Software
         clearos_profile(__METHOD__, __LINE__);
 
         if (! clearos_is_valid_boolean($state))
-            return lang('smtp_mail_disclaimer_state_invalid');
+            return lang('base_state_invalid');
     }
 }

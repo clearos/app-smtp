@@ -5,7 +5,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 $app['basename'] = 'smtp';
-$app['version'] = '1.6.0';
+$app['version'] = '1.6.5';
 $app['release'] = '1';
 $app['vendor'] = 'ClearFoundation';
 $app['packager'] = 'ClearFoundation';
@@ -37,6 +37,7 @@ $app['controllers']['user_policies']['title'] = lang('smtp_user_policies');
 /////////////////////////////////////////////////////////////////////////////
 
 $app['core_requires'] = array(
+    'app-base-core >= 1:1.6.5',
     'app-certificate-manager-core',
     'app-events-core',
     'app-network-core >= 1:1.1.1',

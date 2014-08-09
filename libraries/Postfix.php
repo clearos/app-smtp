@@ -46,7 +46,9 @@ require_once $bootstrap . '/bootstrap.php';
 // T R A N S L A T I O N S
 ///////////////////////////////////////////////////////////////////////////////
 
+clearos_load_language('base');
 clearos_load_language('network');
+clearos_load_language('mail');
 clearos_load_language('smtp');
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1350,13 +1352,13 @@ class Postfix extends Daemon
         clearos_profile(__METHOD__, __LINE__);
 
         if (! Network_Utils::is_valid_domain($domain))
-            return lang('smtp_domain_invalid');
+            return lang('mail_mail_domain_invalid');
 
         if ($check_exists) {
             $destinations = $this->get_destinations();
 
             if (in_array($domain, $destinations))
-                return lang('smtp_domain_already_exists');
+                return lang('mail_mail_domain_already_exists');
         }
     }
 
@@ -1389,7 +1391,7 @@ class Postfix extends Daemon
         clearos_profile(__METHOD__, __LINE__);
 
         if (!preg_match('/^.*@localhost$|^[a-z0-9\._-]+@+[a-z0-9\._-]+\.+[a-z]{2,4}$/', $email))
-            return lang('smtp_email_address_invalid');
+            return lang('base_email_address_invalid');
     }
 
     /**
@@ -1405,13 +1407,13 @@ class Postfix extends Daemon
         clearos_profile(__METHOD__, __LINE__);
 
         if (! Network_Utils::is_valid_domain($domain))
-            return lang('smtp_domain_invalid');
+            return lang('mail_mail_domain_invalid');
 
         $forwarders = $this->get_forwarders();
 
         foreach ($forwarders as $forward_info) {
             if ($forward_info['domain'] === $domain)
-                return lang('smtp_domain_already_exists');
+                return lang('mail_mail_domain_already_exists');
         }
     }
 
@@ -1511,7 +1513,7 @@ class Postfix extends Daemon
         clearos_profile(__METHOD__, __LINE__);
 
         if (! clearos_is_valid_boolean($state))
-            return lang('smtp_smtp_authentication_state_invalid');
+            return lang('base_state_invalid');
     }
 
     /**
@@ -1527,7 +1529,7 @@ class Postfix extends Daemon
         clearos_profile(__METHOD__, __LINE__);
 
         if (! clearos_is_valid_boolean($block))
-            return lang('smtp_smtp_block_plaintext__invalid');
+            return lang('base_state_invalid');
     }
 
     /**
@@ -1562,7 +1564,7 @@ class Postfix extends Daemon
 
         // FIXME
         if (preg_match("/;/", $username))
-            return lang('smtp_username_invalid');
+            return lang('base_username_invalid');
     }
 
     ///////////////////////////////////////////////////////////////////////////////

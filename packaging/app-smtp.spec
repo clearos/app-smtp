@@ -1,7 +1,7 @@
 
 Name: app-smtp
 Epoch: 1
-Version: 1.6.0
+Version: 1.6.5
 Release: 1%{dist}
 Summary: SMTP Server
 License: GPLv3
@@ -22,6 +22,7 @@ Summary: SMTP Server - Core
 License: LGPLv3
 Group: ClearOS/Libraries
 Requires: app-base-core
+Requires: app-base-core >= 1:1.6.5
 Requires: app-certificate-manager-core
 Requires: app-events-core
 Requires: app-network-core >= 1:1.1.1

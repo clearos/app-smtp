@@ -34,6 +34,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 $this->lang->load('smtp');
+$this->lang->load('mail');
 $this->lang->load('base');
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -69,8 +70,8 @@ $max_message_sizes['102400000'] = '100 ' . lang('base_megabytes');
 echo form_open('/smtp/settings/edit');
 echo form_header(lang('base_settings'));
 
-echo field_input('domain', $domain, lang('smtp_domain'), $read_only);
-echo field_input('hostname', $hostname, lang('smtp_hostname'), $read_only);
+echo field_input('domain', $domain, lang('mail_mail_domain'), $read_only);
+echo field_input('hostname', $hostname, lang('mail_mail_hostname'), $read_only);
 echo field_input('relay_host', $relay_host, lang('smtp_relay_host'), $read_only);
 echo field_dropdown('max_message_size', $max_message_sizes, $max_message_size, lang('smtp_maximum_message_size'), $read_only);
 

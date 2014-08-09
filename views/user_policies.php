@@ -60,14 +60,6 @@ echo form_header(lang('smtp_user_policies'));
 
 echo field_toggle_enable_disable('smtp_authentication', $smtp_authentication, lang('smtp_smtp_authentication'), $read_only);
 echo field_toggle_enable_disable('smtp_block_plaintext', $smtp_block_plaintext, lang('smtp_block_plaintext'), $read_only);
-
-/* TODO... maybe
-if (empty($catch_alls))
-    echo field_view(lang('smtp_catch_all'), lang('smtp_no_smtp_users_defined'));
-else
-    echo field_simple_dropdown('catch_all', $catch_alls, $catch_all, lang('smtp_catch_all'), $read_only);
-*/
-
 echo field_button_set($buttons);
 
 echo form_footer();
