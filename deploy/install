@@ -48,17 +48,17 @@ fi
 #-----------------------
 
 logger -p local6.notice -t installer "app-smtp-core - enabling SMTP server"
-chkconfig postfix on
+chkconfig postfix on >/dev/null 2>&1
 
 logger -p local6.notice -t installer "app-smtp-core - starting SMTP server"
 if [ -z `/sbin/pidof master` ]; then
-    service postfix start
+    service postfix start >/dev/null 2>&1
 else
-    service postfix condrestart
+    service postfix condrestart >/dev/null 2>&1
 fi
 
 logger -p local6.notice -t installer "app-smtp-core - enabling saslauth server"
-chkconfig saslauthd on
+chkconfig saslauthd on >/dev/null 2>&1
 
 logger -p local6.notice -t installer "app-smtp-core - starting saslauthd server"
-service saslauthd start
+service saslauthd start  >/dev/null 2>&1
