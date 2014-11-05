@@ -63,6 +63,16 @@ $max_message_sizes['40960000'] = '40 ' . lang('base_megabytes');
 $max_message_sizes['51200000'] = '50 ' . lang('base_megabytes');
 $max_message_sizes['102400000'] = '100 ' . lang('base_megabytes');
 
+// Show tip about hostname/domain settings
+if ($form_type === 'edit') {
+    // FIXME: review - http://tracker.clearfoundation.com/view.php?id=2017
+    $link = (TRUE) ? "<a href='/app/mail'>" . lang('mail_app_name') . "</a>" : '';
+    echo infobox_highlight(
+        lang('base_information'),
+        lang('smtp_mail_settings_in_mail_app_message') . "<p>$link</p>"
+    );
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 // Form
 ///////////////////////////////////////////////////////////////////////////////
@@ -70,8 +80,8 @@ $max_message_sizes['102400000'] = '100 ' . lang('base_megabytes');
 echo form_open('/smtp/settings/edit');
 echo form_header(lang('base_settings'));
 
-echo field_input('domain', $domain, lang('mail_mail_domain'), $read_only);
-echo field_input('hostname', $hostname, lang('mail_mail_hostname'), $read_only);
+echo field_input('domain', $domain, lang('mail_mail_domain'), TRUE);
+echo field_input('hostname', $hostname, lang('mail_mail_hostname'), TRUE);
 echo field_input('relay_host', $relay_host, lang('smtp_relay_host'), $read_only);
 echo field_dropdown('max_message_size', $max_message_sizes, $max_message_size, lang('smtp_maximum_message_size'), $read_only);
 

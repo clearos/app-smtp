@@ -99,8 +99,6 @@ class Settings extends ClearOS_Controller
         // Set validation rules
         //---------------------
          
-        $this->form_validation->set_policy('domain', 'smtp/Postfix', 'validate_domain', TRUE);
-        $this->form_validation->set_policy('hostname', 'smtp/Postfix', 'validate_hostname', TRUE);
         $this->form_validation->set_policy('relay_host', 'smtp/Postfix', 'validate_relay_host');
         $this->form_validation->set_policy('max_message_size', 'smtp/Postfix', 'validate_max_message_size', TRUE);
 
@@ -111,8 +109,6 @@ class Settings extends ClearOS_Controller
 
         if (($this->input->post('submit') && $form_ok)) {
             try {
-                $this->postfix->set_hostname($this->input->post('hostname'));
-                $this->postfix->set_domain($this->input->post('domain'));
                 $this->postfix->set_relay_host($this->input->post('relay_host'));
                 $this->postfix->set_max_message_size($this->input->post('max_message_size'));
 
