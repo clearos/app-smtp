@@ -10,6 +10,7 @@ $lang['smtp_configure_accounts'] = 'Configure Accounts';
 $lang['smtp_destination_domains'] = 'Destination Domains';
 $lang['smtp_mail_disclaimer_invalid'] = 'Mail disclaimer is invalid.';
 $lang['smtp_mail_forwarding'] = 'Mail Forwarding';
+$lang['smtp_mail_settings_in_mail_app_message'] = 'The hostname and domain settings can be configured in the Mail Settings app.';
 $lang['smtp_maximum_message_size'] = 'Maximum Message Size';
 $lang['smtp_port_invalid'] = 'Port is invalid.';
 $lang['smtp_recipient_mapping_invalid'] = 'Recipient mapping is invalid.';
