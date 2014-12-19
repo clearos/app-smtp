@@ -5,7 +5,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 $app['basename'] = 'smtp';
-$app['version'] = '2.0.5';
+$app['version'] = '2.0.8';
 $app['release'] = '1';
 $app['vendor'] = 'ClearFoundation';
 $app['packager'] = 'ClearFoundation';
@@ -50,7 +50,7 @@ $app['core_requires'] = array(
 );
 
 $app['requires'] = array(
-    'app-mail-settings',
+    'app-mail',
     'app-network',
     'app-smtp-plugin-core',
 );

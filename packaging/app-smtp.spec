@@ -1,7 +1,7 @@
 
 Name: app-smtp
 Epoch: 1
-Version: 2.0.5
+Version: 2.0.8
 Release: 1%{dist}
 Summary: SMTP Server
 License: GPLv3
@@ -10,7 +10,7 @@ Source: %{name}-%{version}.tar.gz
 Buildarch: noarch
 Requires: %{name}-core = 1:%{version}-%{release}
 Requires: app-base
-Requires: app-mail-settings
+Requires: app-mail
 Requires: app-network
 Requires: app-smtp-plugin-core
 
