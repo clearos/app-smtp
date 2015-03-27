@@ -50,4 +50,13 @@ clearos_load_library('smtp/Postfix');
 ///////////////////////////////////////////////////////////////////////////////
 
 $postfix = new Postfix();
+
+// Upgrade search domains
 $postfix->update_search_domains();
+
+// Add IPv6
+$trusted = $postfix->get_trusted_networks();
+if (! in_array('[::1]/128', $trusted)) {
+    clearos_log('app-smtp-core', 'adding IPv6 to trusted networks');
+    $postfix->add_trusted_network('[::1]/128');
+}

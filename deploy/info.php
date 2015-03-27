@@ -5,7 +5,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 $app['basename'] = 'smtp';
-$app['version'] = '2.0.20';
+$app['version'] = '2.0.21';
 $app['release'] = '1';
 $app['vendor'] = 'ClearFoundation';
 $app['packager'] = 'ClearFoundation';
@@ -40,7 +40,7 @@ $app['core_requires'] = array(
     'app-base-core >= 1:1.6.5',
     'app-certificate-manager-core',
     'app-events-core',
-    'app-network-core >= 1:1.1.1',
+    'app-network-core >= 1:2.0.21',
     'app-mail-core',
     'cyrus-sasl',
     'cyrus-sasl-plain',
@@ -67,3 +67,5 @@ $app['core_directory_manifest'] = array(
     '/var/clearos/smtp/backup' => array(),
     '/var/clearos/events/smtp' => array(),
 );
+
+$app['delete_dependency'] = array();

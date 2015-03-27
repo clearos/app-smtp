@@ -45,7 +45,7 @@ if [ ! -s "$CRT" ]; then
     chmod 600 $CRT
 fi
 
-# Update search domains
-#----------------------
+# Updates via API
+#----------------
 
-/usr/clearos/apps/smtp/deploy/update-search-domains
+/usr/clearos/apps/smtp/deploy/upgrade-api

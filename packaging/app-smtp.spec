@@ -1,7 +1,7 @@
 
 Name: app-smtp
 Epoch: 1
-Version: 2.0.20
+Version: 2.0.21
 Release: 1%{dist}
 Summary: SMTP Server
 License: GPLv3
@@ -25,7 +25,7 @@ Requires: app-base-core
 Requires: app-base-core >= 1:1.6.5
 Requires: app-certificate-manager-core
 Requires: app-events-core
-Requires: app-network-core >= 1:1.1.1
+Requires: app-network-core >= 1:2.0.21
 Requires: app-mail-core
 Requires: cyrus-sasl
 Requires: cyrus-sasl-plain
