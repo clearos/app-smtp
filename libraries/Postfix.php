@@ -1060,8 +1060,6 @@ class Postfix extends Daemon
         // Make sure mailbox_size_limit is bigger than message_size_limit
         //---------------------------------------------------------------
 
-//FIXME
-
         $mailbox_size_limit = $this->get_max_mailbox_size();
 
         if ($mailbox_size_limit < $size)
