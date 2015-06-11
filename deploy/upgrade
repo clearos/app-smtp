@@ -49,3 +49,12 @@ fi
 #----------------
 
 /usr/clearos/apps/smtp/deploy/upgrade-api
+
+# Set protocol to IPv4 only for now (remove after 7.1 Final)
+#----------------------------------
+
+CHECK=`grep ^inet_protocols[[:space:]]*=[[:space:]]*all /etc/postfix/main.cf`
+if [ -n "$CHECK" ]; then
+    logger -p local6.notice -t installer "app-smtp-core - changing policy to IPv4 only"
+    sed -i -e 's/^inet_protocols[[:space:]]*.*/inet_protocols = ipv4/' /etc/postfix/main.cf
+fi
