@@ -5,7 +5,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 $app['basename'] = 'smtp';
-$app['version'] = '2.1.6';
+$app['version'] = '2.2.1';
 $app['release'] = '1';
 $app['vendor'] = 'ClearFoundation';
 $app['packager'] = 'ClearFoundation';
@@ -59,6 +59,12 @@ $app['core_file_manifest'] = array(
     'filewatch-smtp-event.conf'=> array('target' => '/etc/clearsync.d/filewatch-smtp-event.conf'),
     'postfix.php'=> array('target' => '/var/clearos/base/daemon/postfix.php'),
     'authorize'=> array('target' => '/etc/clearos/smtp.d/authorize'),
+    'postfix-sasl.php' => array('target' => '/var/clearos/attack_detector/filters/postfix-sasl.php'),
+    'clearos-postfix-sasl.conf' => array(
+        'target' => '/etc/fail2ban/jail.d/clearos-postfix-sasl.conf',
+        'config' => TRUE,
+        'config_params' => 'noreplace'
+    )
 );
 
 $app['core_directory_manifest'] = array(

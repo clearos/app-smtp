@@ -58,3 +58,11 @@ if [ -n "$CHECK" ]; then
     logger -p local6.notice -t installer "app-smtp-core - changing policy to IPv4 only"
     sed -i -e 's/^inet_protocols[[:space:]]*.*/inet_protocols = ipv4/' /etc/postfix/main.cf
 fi
+
+# Reload fail2ban if installed
+#------------------------------
+
+if [ -x /usr/bin/fail2ban-server ]; then
+    logger -p local6.notice -t installer "app-smtp-core - enabling Attack Detector configlet"
+    service fail2ban condrestart >/dev/null 2>&1
+fi

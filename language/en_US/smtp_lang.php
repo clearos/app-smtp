@@ -6,6 +6,7 @@ $lang['smtp_app_name'] = 'SMTP Server';
 $lang['smtp_block_plaintext'] = 'Block Plain-Text Passwords';
 $lang['smtp_configure_accounts'] = 'Configure Accounts';
 $lang['smtp_destination_domains'] = 'Destination Domains';
+$lang['smtp_failed_login_detection'] = 'SMTP Failed Logins';
 $lang['smtp_mail_disclaimer_invalid'] = 'Mail disclaimer is invalid.';
 $lang['smtp_mail_forwarding'] = 'Mail Forwarding';
 $lang['smtp_mail_settings_in_mail_app_message'] = 'The hostname and domain settings can be configured in the Mail Settings app.';

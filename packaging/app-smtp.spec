@@ -1,7 +1,7 @@
 
 Name: app-smtp
 Epoch: 1
-Version: 2.1.6
+Version: 2.2.1
 Release: 1%{dist}
 Summary: SMTP Server
 License: GPLv3
@@ -51,7 +51,9 @@ install -d -m 0755 %{buildroot}/var/clearos/events/smtp
 install -d -m 0755 %{buildroot}/var/clearos/smtp
 install -d -m 0755 %{buildroot}/var/clearos/smtp/backup
 install -D -m 0644 packaging/authorize %{buildroot}/etc/clearos/smtp.d/authorize
+install -D -m 0644 packaging/clearos-postfix-sasl.conf %{buildroot}/etc/fail2ban/jail.d/clearos-postfix-sasl.conf
 install -D -m 0644 packaging/filewatch-smtp-event.conf %{buildroot}/etc/clearsync.d/filewatch-smtp-event.conf
+install -D -m 0644 packaging/postfix-sasl.php %{buildroot}/var/clearos/attack_detector/filters/postfix-sasl.php
 install -D -m 0644 packaging/postfix.php %{buildroot}/var/clearos/base/daemon/postfix.php
 
 %post
@@ -99,5 +101,7 @@ exit 0
 /usr/clearos/apps/smtp/language
 /usr/clearos/apps/smtp/libraries
 /etc/clearos/smtp.d/authorize
+%config(noreplace) /etc/fail2ban/jail.d/clearos-postfix-sasl.conf
 /etc/clearsync.d/filewatch-smtp-event.conf
+/var/clearos/attack_detector/filters/postfix-sasl.php
 /var/clearos/base/daemon/postfix.php
