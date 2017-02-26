@@ -1,7 +1,7 @@
 
 Name: app-smtp
 Epoch: 1
-Version: 2.3.0
+Version: 2.3.20
 Release: 1%{dist}
 Summary: SMTP Server
 License: GPLv3
@@ -92,6 +92,7 @@ exit 0
 %files core
 %defattr(-,root,root)
 %exclude /usr/clearos/apps/smtp/packaging
+%exclude /usr/clearos/apps/smtp/unify.json
 %dir /usr/clearos/apps/smtp
 %dir /etc/clearos/smtp.d
 %dir /var/clearos/events/smtp
