@@ -5,13 +5,23 @@
 /////////////////////////////////////////////////////////////////////////////
 
 $app['basename'] = 'smtp';
-$app['version'] = '2.3.22';
+$app['version'] = '2.3.23';
 $app['release'] = '1';
 $app['vendor'] = 'ClearFoundation';
 $app['packager'] = 'ClearFoundation';
 $app['license'] = 'GPLv3';
 $app['license_core'] = 'LGPLv3';
 $app['description'] = lang('smtp_app_description');
+$app['powered_by'] = array(
+    'vendor' => NULL,
+    'packages' => array(
+        'postfix' => array(
+            'name' => 'Postfix',
+            'version' => '---',
+            'url' => 'http://www.postfix.org/',
+        ),
+    ),
+);
 
 /////////////////////////////////////////////////////////////////////////////
 // App name and categories
