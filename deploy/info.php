@@ -5,7 +5,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 $app['basename'] = 'smtp';
-$app['version'] = '2.3.23';
+$app['version'] = '2.4.0';
 $app['release'] = '1';
 $app['vendor'] = 'ClearFoundation';
 $app['packager'] = 'ClearFoundation';
@@ -18,7 +18,6 @@ $app['powered_by'] = array(
         'postfix' => array(
             'name' => 'Postfix',
             'version' => '---',
-            'url' => 'http://www.postfix.org/',
         ),
     ),
 );
